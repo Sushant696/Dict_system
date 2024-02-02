@@ -103,7 +103,7 @@ def create_login_registration_window():
         # Switch to registration view
         label_signup.config(text="Register", fg="black")
         login_button.config(command=register_user)
-        register_button.config(text="R", command=switch_to_login_view)
+        register_button.config(text="Register", command=switch_to_login_view)
 
     def switch_to_login_view():
         # Switch to login view
