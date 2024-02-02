@@ -46,7 +46,6 @@ def add_word_window():
     add_button.place(x=210,y=380,height=50,width=100)
 
 
-
 # This is label for alert message output
     alert =Label(add_root,text="",foreground="red")
     alert.place(x=150,y=460)
@@ -54,7 +53,7 @@ def add_word_window():
 
     add_root.mainloop()
 
-
+add_word_window()
 
 
 
