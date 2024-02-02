@@ -1,4 +1,5 @@
 from tkinter import *
+from addWordWindow import add_word_window
 
 root = Tk()
 root.geometry('1200x750')
@@ -15,9 +16,9 @@ body_frame.place(x=20, y=80, width=1160, height=660)
 
 
 def search_word():
-
-    word_label = Label(root, text='text')
-    word_label.place(x=20, y=50, width=80, height=50)
+    pass
+    # word_label = Label(root, text='text')
+    # word_label.place(x=20, y=50, width=80, height=50)
 
 def search_bar():
 
@@ -33,9 +34,12 @@ def search_bar():
 
 
 def main():
-    pass
+    add_word_button = Button(body_frame, text='Add New Word' ,command=add_word_window)
+    add_word_button.place(x=1030, y=5, width=100, height=45)
+
 
 # search function
 search_bar()
+main()
 
 root.mainloop()
