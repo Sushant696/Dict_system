@@ -2,6 +2,7 @@ from tkinter import *
 
 def add_word_window():
     add_root = Tk()
+    add_root.title("Add Word in Dictionary")
     add_root.geometry("500x500")
     add_root.resizable(0,0)
 
@@ -22,7 +23,7 @@ def add_word_window():
 
     #this is just a function that displays alert messages!
     def alert_message(message):
-        alert.config(text=f"{message}")
+        alert.config(text=f"INFO:{message}")
 
     # labels
     word_label = Label(add_root,text="Word",font=16)
@@ -47,13 +48,13 @@ def add_word_window():
 
 
 # This is label for alert message output
-    alert =Label(text="",bg="red")
-    alert.place(x=200,y=460)
+    alert =Label(add_root,text="",foreground="red")
+    alert.place(x=150,y=460)
 
 
     add_root.mainloop()
 
-add_word_window()
+
 
 
 
