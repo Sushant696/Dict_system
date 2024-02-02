@@ -11,9 +11,9 @@ def add_word_window():
         if word.get()=="" and description.get("1.0", END) == "\n":
             alert_message("Both Word and Description are Empty!")
         elif word.get()=="":
-            alert_message("Word is Empty!")
+            alert_message("     Word is Empty!")
         elif description.get("1.0", END) == "\n":
-            alert_message("Description is Empty!")
+            alert_message("     Description is Empty!")
         else:
             alert.config(text="")
             word.delete(0,END)
@@ -23,7 +23,7 @@ def add_word_window():
 
     #this is just a function that displays alert messages!
     def alert_message(message):
-        alert.config(text=f"INFO:{message}")
+        alert.config(text=f"INFO : {message}")
 
     # labels
     word_label = Label(add_root,text="Word",font=16)
@@ -53,7 +53,7 @@ def add_word_window():
 
     add_root.mainloop()
 
-add_word_window()
+
 
 
 
