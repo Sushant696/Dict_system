@@ -1,4 +1,12 @@
 from tkinter import *
+from words import word_list
+
+words =[]
+
+# loop that appends the "all the words that are comming" to the varible named words.
+for i in word_list:
+    words.append(i["word"].lower())
+
 
 def add_word_window():
     add_root = Tk()
@@ -6,7 +14,19 @@ def add_word_window():
     add_root.geometry("500x500")
     add_root.resizable(0,0)
 
-        #function that works when the add button is clicked and checks the boxes wheather they are empty or not
+
+
+# This checks weather the word entered by user is in dictionary list or not
+    def check_user_word(word_by_user):
+        if word_by_user in words:
+            alert_message("Word already exits!")
+        else:
+            alert_message("Word Added Sucessfully!")
+            word.delete(0,END)
+            description.delete("1.0",END)
+
+
+# Function that works when the add button is clicked and checks the boxes wheather they are empty or not
     def submit():
         if word.get()=="" and description.get("1.0", END) == "\n":
             alert_message("Both Word and Description are Empty!")
@@ -15,13 +35,12 @@ def add_word_window():
         elif description.get("1.0", END) == "\n":
             alert_message("     Description is Empty!")
         else:
-            alert.config(text="")
-            word.delete(0,END)
-            description.delete("1.0",END)
+            check_user_word(word.get().lower())
+            
 
 
 
-    #this is just a function that displays alert messages!
+# This is just a function that displays alert messages!
     def alert_message(message):
         alert.config(text=f"INFO : {message}")
 
@@ -52,9 +71,4 @@ def add_word_window():
 
 
     add_root.mainloop()
-
-
-
-
-
 
