@@ -15,12 +15,15 @@ def add_word_window():
     add_root.resizable(0,0)
 
 
+    
+
 
 # This checks weather the word entered by user is in dictionary list or not
     def check_user_word(word_by_user):
         if word_by_user in words:
             alert_message("Word already exits!")
         else:
+            get_data()
             alert_message("Word Added Sucessfully!")
             word.delete(0,END)
             description.delete("1.0",END)
@@ -37,8 +40,12 @@ def add_word_window():
         else:
             check_user_word(word.get().lower())
             
-
-
+# Function to get word and description by user
+    def get_data():
+        new_word = word.get()
+        new_des = description.get(1.0,END)
+        print(new_word)
+        print(new_des)
 
 # This is just a function that displays alert messages!
     def alert_message(message):
@@ -72,3 +79,4 @@ def add_word_window():
 
     add_root.mainloop()
 
+add_word_window()
