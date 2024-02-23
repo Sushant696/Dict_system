@@ -25,8 +25,7 @@ def add_word_window():
         else:
             get_data()
             alert_message("Word Added Sucessfully!")
-            word.delete(0,END)
-            description.delete("1.0",END)
+            
 
 
 # Function that works when the add button is clicked and checks the boxes wheather they are empty or not
@@ -42,10 +41,10 @@ def add_word_window():
             
 # Function to get word and description by user
     def get_data():
-        new_word = word.get()
-        new_des = description.get(1.0,END)
-        print(new_word)
-        print(new_des)
+        word_des = {'word':word.get(),"description":description.get(1.0,END).strip()}
+        word.delete(0,END)
+        description.delete("1.0",END)
+        print(word_des)
 
 # This is just a function that displays alert messages!
     def alert_message(message):
