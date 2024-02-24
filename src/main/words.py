@@ -104,7 +104,7 @@ def add_word_window():
 
 
     add_root.mainloop()
-add_word_window()
+
 
 
 
@@ -131,9 +131,6 @@ def retrieve_data(id=None):
             cursor.execute('''SELECT * FROM description''')
             data = cursor.fetchall()
             result = [{"id": row[0], "word": row[1], "description": row[2]} for row in data]
-            print("All Data:")
-            for row in result:
-                print(row)
 
         # Close the database connection
         conn.close()
@@ -171,15 +168,3 @@ def display_words_ui(container_frame):
         word_des_label.grid(row=1, column=0, sticky="w")
 
 
-if __name__ == "__main__":
-    root = Tk()
-    root.geometry('400x400')
-    root.title('Dictionary System')
-    root.resizable(False, False)
-
-    left_frame = Frame(root, bg='green')
-    left_frame.pack(side="left", fill="both", expand=True)
-
-    display_words_ui(left_frame)
-
-    root.mainloop()
