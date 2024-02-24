@@ -7,6 +7,8 @@ words =[]
 
 
 
+
+
 def add_word_window():
     add_root = Tk()
     add_root.title("Add Word in Dictionary")
@@ -143,41 +145,41 @@ def retrieve_data(id=None):
         return None
     
 
-word_list = retrieve_data()
+word_list = json.loads(retrieve_data())
+# word_list = retrieve_data()
 # loop that appends the "all the words that are comming" to the varible named words.
-# for i in word_list:
-#     words.append(i.id["word"].lower())
-
+for i in word_list:
+    words.append(i["word"].lower())
 print(word_list)
 
 
 
 
 ###################################################################################################################################
-# def display_words_ui(container_frame):
-#     for i, word_dict in enumerate(word_list):
-#         word_frame = Frame(container_frame)
-#         word_frame.grid(row=(i // 2) + 1, column=i %
-#                         2, padx=70, pady=20, sticky="w")
+def display_words_ui(container_frame):
+    for i, word_dict in enumerate(word_list):
+        word_frame = Frame(container_frame)
+        word_frame.grid(row=(i // 2) + 1, column=i %
+                        2, padx=70, pady=20, sticky="w")
 
-#         word_label = Label(word_frame, text=f"{i + 1}. {word_dict['word']}", font=(
-#             "Helvetica", 12), justify="left", wraplength=400)
-#         word_label.grid(row=0, column=0, sticky="w")
+        word_label = Label(word_frame, text=f"{i + 1}. {word_dict['word']}", font=(
+            "Helvetica", 12), justify="left", wraplength=400)
+        word_label.grid(row=0, column=0, sticky="w")
 
-#         word_des_label = Label(word_frame, text=f"{word_dict['description']}", font=(
-#             "Helvetica", 14), justify="left", wraplength=400)
-#         word_des_label.grid(row=1, column=0, sticky="w")
+        word_des_label = Label(word_frame, text=f"{word_dict['description']}", font=(
+            "Helvetica", 14), justify="left", wraplength=400)
+        word_des_label.grid(row=1, column=0, sticky="w")
 
 
-# if __name__ == "__main__":
-#     root = Tk()
-#     root.geometry('400x400')
-#     root.title('Dictionary System')
-#     root.resizable(False, False)
+if __name__ == "__main__":
+    root = Tk()
+    root.geometry('400x400')
+    root.title('Dictionary System')
+    root.resizable(False, False)
 
-#     left_frame = Frame(root, bg='green')
-#     left_frame.pack(side="left", fill="both", expand=True)
+    left_frame = Frame(root, bg='green')
+    left_frame.pack(side="left", fill="both", expand=True)
 
-#     display_words_ui(left_frame)
+    display_words_ui(left_frame)
 
-#     root.mainloop()
+    root.mainloop()
