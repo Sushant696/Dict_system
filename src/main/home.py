@@ -22,7 +22,6 @@ def search_word():
     # word_label.place(x=20, y=50, width=80, height=50)
 
 
-    
 def search_bar():
 
     # search bar section
@@ -43,7 +42,7 @@ def display_words():
 def main():
     add_word_button = Button(
         body_frame, text='Add New Word', command=add_word_window)
-    add_word_button.place(x=1030, y=5, width=100, height=45)
+    add_word_button.grid(row=0, column=0, padx=10, pady=10, sticky="e")
 
 
 # search function

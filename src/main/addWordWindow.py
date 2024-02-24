@@ -79,4 +79,4 @@ def add_word_window():
 
     add_root.mainloop()
 
-add_word_window()
+# add_word_window()
