@@ -2,6 +2,42 @@ from tkinter import *
 import sqlite3
 import json
 
+def retrieve_data(id=None):
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect('words.db')
+        cursor = conn.cursor()
+
+        if id is not None:
+            # Execute the SQL query to retrieve data for the given id
+            cursor.execute('''SELECT * FROM description WHERE id = ?''', (id,))
+            data = cursor.fetchone()
+            if data:
+                result = {"id": data[0], "word": data[1], "description": data[2]}
+                print("Data for ID", id, ":")
+                print(result)
+            else:
+                result = None
+        else:
+            # Execute the SQL query to retrieve all data
+            cursor.execute('''SELECT * FROM description''')
+            data = cursor.fetchall()
+            result = [{"id": row[0], "word": row[1], "description": row[2]} for row in data]
+
+        # Close the database connection
+        conn.close()
+
+        # Convert the result to JSON format
+        return json.dumps(result)
+    except sqlite3.Error as e:
+        print("SQLite error:", e)
+        return None
+    
+
+
+word_list =json.loads(retrieve_data())
+print(word_list)
+
 root = Tk()
 root.geometry('1200x750')
 root.title('Dictionary System')
@@ -43,7 +79,7 @@ def add_word_window():
     def submit():
         global word_list
         word_list=[]
-        print(f"check{word_list}")
+        # print(f"check{word_list}")
         display_words_ui(body_frame)
         if word.get()=="" and description.get("1.0", END) == "\n":
             alert_message("Both Word and Description are Empty!")
@@ -53,7 +89,12 @@ def add_word_window():
             alert_message("     Description is Empty!")
         else:
             check_user_word(word.get().lower())
-            display_words_ui(body_frame)            
+            word_list=json.loads(retrieve_data())
+            # print(f"check two :  {word_list}")
+            display_words_ui(body_frame)   
+            display_words() 
+
+
 # Function to get word and description by user
     def get_data():
         word_des = {'word':word.get(),"description":description.get(1.0,END).strip()}
@@ -124,44 +165,9 @@ def add_word_window():
 
 
 
-def retrieve_data(id=None):
-    try:
-        # Connect to the SQLite database
-        conn = sqlite3.connect('words.db')
-        cursor = conn.cursor()
-
-        if id is not None:
-            # Execute the SQL query to retrieve data for the given id
-            cursor.execute('''SELECT * FROM description WHERE id = ?''', (id,))
-            data = cursor.fetchone()
-            if data:
-                result = {"id": data[0], "word": data[1], "description": data[2]}
-                print("Data for ID", id, ":")
-                print(result)
-            else:
-                result = None
-        else:
-            # Execute the SQL query to retrieve all data
-            cursor.execute('''SELECT * FROM description''')
-            data = cursor.fetchall()
-            result = [{"id": row[0], "word": row[1], "description": row[2]} for row in data]
-
-        # Close the database connection
-        conn.close()
-
-        # Convert the result to JSON format
-        return json.dumps(result)
-    except sqlite3.Error as e:
-        print("SQLite error:", e)
-        return None
-    
-
-word_list =json.loads(retrieve_data())
-
 # loop that appends the "all the words that are comming" to the varible named words.
 for i in word_list:
     words.append(i["word"].lower())
-print(word_list)
 
 
 
