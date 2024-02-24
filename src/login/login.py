@@ -1,33 +1,3 @@
-<<<<<<< HEAD
-from tkinter import *
-
-def set_background_color(frame, color):
-    frame.config(bg=color)
-
-def create_window():
-    window = Tk()
-    window.title("Green and Gray Window")
-    window.geometry("600x500")
-    window.resizable(0, 0)  # Disable window resizing
-
-    # Create a frame for the left half (green color)
-    left_frame = Frame(window, width=300, height=500)
-    left_frame.grid(row=0, column=0, sticky="nsew")
-    set_background_color(left_frame, "#3D9962")  # Green color
-    
-    label_team = Label(left_frame, text="Team Ignition", font=("Helvetica", 20), bg="#3D9962", fg="white")
-    label_team.place(relx=0.5, rely=0.5, anchor="center")
-
-    # Create a frame for the right half (gray color)
-    right_frame = Frame(window, width=300, height=500)
-    right_frame.grid(row=0, column=1, sticky="nsew")
-    set_background_color(right_frame, "#D9D9D9")  # Gray color
-
-    label_signup = Label(right_frame, text="Sign Up", font=("Helvetica", 20), bg="#D9D9D9", fg="black")
-    label_signup.place(relx=0.5, rely=0.1, anchor="center")
-    
-    # Username label and entry in the same line
-=======
 import sqlite3
 from tkinter import *
 
@@ -73,6 +43,18 @@ def check_user(username, password):
 
     return user is not None
 
+# Function to fetch all users from the 'users' table
+def fetch_all_users():
+    connection = sqlite3.connect("users.db")
+    cursor = connection.cursor()
+
+    cursor.execute('SELECT * FROM users')
+    users = cursor.fetchall()
+
+    connection.close()
+
+    return users
+
 # Function to create the login window
 def create_login_window():
     create_database()
@@ -85,6 +67,10 @@ def create_login_window():
         if entered_username and entered_password:
             if check_user(entered_username, entered_password):
                 result_label.config(text="Login successful.", fg="green")
+                # Fetch and display all users
+                users = fetch_all_users()
+                for user in users:
+                    print(user)  # Displaying in console
                 create_work_completed_window()
                 window.destroy()
             else:
@@ -112,32 +98,12 @@ def create_login_window():
     label_signup = Label(right_frame, text="Login", font=("Helvetica", 20), bg="#D9D9D9", fg="#4C5E8C")
     label_signup.place(relx=0.5, rely=0.1, anchor="center")
 
->>>>>>> f59557e60a1926577ec6be0f68fa1e0d60fc7fda
     username_label = Label(right_frame, text="Username", font=("Helvetica", 10), bg="#D9D9D9", fg="black")
     username_label.place(relx=0.15, rely=0.30, anchor="center")
 
     username_entry = Entry(right_frame, font=("Helvetica", 14), bd=4, relief="flat", justify="center")
     username_entry.place(relx=0.6, rely=0.30, anchor="center", width=200)
 
-<<<<<<< HEAD
-    # Password label
-    password_label = Label(right_frame, text="Password", font=("Helvetica", 10), bg="#D9D9D9", fg="black")
-    password_label.place(relx=0.15, rely=0.40, anchor="center")
-
-    # Password entry
-    password_entry = Entry(right_frame, font=("Helvetica", 14), bd=5, relief="flat", justify="center", show="•")
-    password_entry.place(relx=0.6, rely=0.40, anchor="center", width=200)
-
-    # Login button
-    login_button = Button(right_frame, text=" Login ", font=("Helvetica", 12), bg="#3D9962", fg="white", command=login_action)
-    login_button.place(relx=0.3, rely=0.7, anchor="center")
-    
-    # Register button
-    register_button = Button(right_frame, text=" Register ", font=("Helvetica", 12), bg="#3D9962", fg="white", command=register_action)
-    register_button.place(relx=0.6, rely=0.7, anchor="center")
-
-    # Make the frames expand to fill the window
-=======
     password_label = Label(right_frame, text="Password", font=("Helvetica", 10), bg="#D9D9D9", fg="black")
     password_label.place(relx=0.15, rely=0.40, anchor="center")
 
@@ -158,27 +124,10 @@ def create_login_window():
     login_button = Button(right_frame, text=" Login ", font=("Helvetica", 12), bg="#3D9962", fg="white", command=login_action)
     login_button.place(relx=0.5, rely=0.8, anchor="center")
 
->>>>>>> f59557e60a1926577ec6be0f68fa1e0d60fc7fda
     window.grid_rowconfigure(0, weight=1)
     window.grid_columnconfigure(0, weight=1)
     window.grid_columnconfigure(1, weight=1)
 
-<<<<<<< HEAD
-    window.mainloop()
-
-# Function to handle the login action
-def login_action():
-    # Add your login logic here
-    print("Login button clicked")
-
-# Function to handle the register action
-def register_action():
-    # Add your register logic here
-    print("Register button clicked")
-
-# Create and run the window
-create_window()
-=======
     # Creating the registration window
     registration_window = Tk()
     registration_window.title("Registration Page")
@@ -237,8 +186,18 @@ create_window()
 
     # Function to handle registration button click
     def registration_action():
-        # Implement your registration logic here
-        pass
+        # Fetching data from entries
+        name = registration_name_entry.get()
+        email = registration_email_entry.get()
+        username = registration_username_entry.get()
+        password = registration_password_entry.get()
+
+        if name and email and username and password:
+            # Inserting the user into the database
+            insert_user(username, password)
+            registration_result_label.config(text="User has been registered successfully.", fg="green")
+        else:
+            registration_result_label.config(text="Please fill in all fields.", fg="red")
 
     registration_register_button = Button(registration_right_frame, text=" Register ", font=("Helvetica", 12), bg="#3D9962", fg="white", command=registration_action)
     registration_register_button.place(relx=0.5, rely=0.7, anchor="center")
@@ -262,4 +221,3 @@ def create_work_completed_window():
 
 # Run the login window
 create_login_window()
->>>>>>> f59557e60a1926577ec6be0f68fa1e0d60fc7fda
