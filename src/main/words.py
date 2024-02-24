@@ -1,3 +1,4 @@
+import sqlite3
 from tkinter import *
 
 word_list = [
