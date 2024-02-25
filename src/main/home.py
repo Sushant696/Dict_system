@@ -176,7 +176,7 @@ def delete_button():
 
     def delete_action():
         password = password_entry.get().strip().lower() #getting password
-        if(password!=""):
+        if(password!="1234"):
             del_root.destroy()
             not_admin_root = Tk()
             not_admin_root.geometry("300x300")
@@ -259,11 +259,12 @@ def delete_button():
 
                         global word_list
                         word_list = word_des_inside
-                        
-                        print(word_list)
-                        display_words_ui(body_frame)
-                        display_words()
 
+
+
+                        display_words_ui(body_frame)
+                       
+                        
 
 
                         confirm_label.destroy()
@@ -283,7 +284,7 @@ def delete_button():
                     no_button.place(x=190,y=280,width=80,height=40)
                     result_msg = Label(yes_admin,text="",fg="green")
                     result_msg.place(x=110,y=330)
-
+                
 
 
 
@@ -299,7 +300,7 @@ def delete_button():
             
 
    
-    password_label = Label(del_root,text="Enter password",font=18)
+    password_label = Label(del_root,text="Enter token to continue",font=18)
     password_label.place(x=110,y=80)
     password_entry= Entry(del_root,font=20)
     password_entry.place(x=110,y=100,width=180,height=30)
@@ -308,12 +309,6 @@ def delete_button():
 
     del_root.mainloop()
 
-
-
-
-
-
-###@@@###@@@##@@
 
 
 
@@ -393,6 +388,18 @@ for i in word_list:
 
 ###################################################################################################################################
 def display_words_ui(container_frame):
+        # Get the list of existing widgets
+    widgets = container_frame.winfo_children()
+
+    # Skip the first two widgets (assuming they are the Add New Word and Delete Word buttons)
+    existing_widgets = widgets[2:]
+
+    # Destroy existing word frames
+    for widget in existing_widgets:
+        widget.destroy()
+    #above here destroyed the exising widget except the add word and delete word button
+        
+    
     for i, word_dict in enumerate(word_list):
         word_frame = Frame(container_frame , relief="solid")
         word_frame.grid(row=(i // 3), column=i %
@@ -410,8 +417,6 @@ def display_words_ui(container_frame):
                                'word'], description=word_dict['description']: update_word_window(id, word, description))
         # Set sticky to "w" (west/left)
         update_button.grid(row=2, column=0, pady=5, sticky="w")
-
-# @@@@@
 
 
 def search_word():
@@ -455,8 +460,6 @@ def main():
 search_bar()
 main()
 display_words()
-
-# @@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 root.mainloop()
