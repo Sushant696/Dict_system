@@ -88,7 +88,7 @@ def create_login_window():
     left_frame.grid(row=0, column=0, sticky="nsew")
     set_background_color(left_frame, "#3D9962")
 
-    label_team = Label(left_frame, text="Project Ignition", font=("Helvetica", 20), bg="#3D9962", fg="white")
+    label_team = Label(left_frame, text="Team Ignition", font=("Helvetica", 20), bg="#3D9962", fg="white")
     label_team.place(relx=0.5, rely=0.5, anchor="center")
 
     right_frame = Frame(window, width=300, height=500)
@@ -139,7 +139,7 @@ def create_login_window():
     registration_left_frame.grid(row=0, column=0, sticky="nsew")
     set_background_color(registration_left_frame, "#3D9962")
 
-    registration_label_team = Label(registration_left_frame, text="Project Ignition", font=("Helvetica", 20), bg="#3D9962", fg="white")
+    registration_label_team = Label(registration_left_frame, text="Team Ignition", font=("Helvetica", 20), bg="#3D9962", fg="white")
     registration_label_team.place(relx=0.5, rely=0.5, anchor="center")
 
     registration_right_frame = Frame(registration_window, width=300, height=500)
@@ -173,7 +173,7 @@ def create_login_window():
     registration_password_entry = Entry(registration_right_frame, font=("Helvetica", 14), bd=5, relief="flat", justify="center", show="•")
     registration_password_entry.place(relx=0.6, rely=0.55, anchor="center", width=200)
 
-    registration_retype_password_label = Label(registration_right_frame, text="Retype-Pass", font=("Helvetica", 9), bg="#D9D9D9", fg="black")
+    registration_retype_password_label = Label(registration_right_frame, text="Retype Password", font=("Helvetica", 10), bg="#D9D9D9", fg="black")
     registration_retype_password_label.place(relx=0.15, rely=0.65, anchor="center")
 
     registration_retype_password_entry = Entry(registration_right_frame, font=("Helvetica", 14), bd=5, relief="flat", justify="center", show="•")
@@ -210,7 +210,7 @@ def create_login_window():
             registration_result_label.config(text="Please fill in all fields.", fg="red")
 
     registration_register_button = Button(registration_right_frame, text=" Register ", font=("Helvetica", 12), bg="#3D9962", fg="white", command=registration_action)
-    registration_register_button.place(relx=0.5, rely=0.9, anchor="center")
+    registration_register_button.place(relx=0.5, rely=0.7, anchor="center")
 
     registration_window.grid_rowconfigure(0, weight=1)
     registration_window.grid_columnconfigure(0, weight=1)
