@@ -186,13 +186,8 @@ def create_login_window():
 
     # Function to handle registration button click
     def registration_action():
-        entered_username = registration_username_entry.get()
-        entered_password = registration_password_entry.get()
-        if entered_username and entered_password:
-            insert_user(entered_username, entered_password)
-            registration_result_label.config(text="User has been created.", fg="green")
-        else:
-            registration_result_label.config(text="Please enter both username and password.", fg="red")
+        # Implement your registration logic here
+        pass
 
     registration_register_button = Button(registration_right_frame, text=" Register ", font=("Helvetica", 12), bg="#3D9962", fg="white", command=registration_action)
     registration_register_button.place(relx=0.5, rely=0.7, anchor="center")
