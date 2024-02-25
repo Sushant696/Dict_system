@@ -168,10 +168,58 @@ def update_word_window(word_id, current_word, current_description):
 # Delete word from the database
 
 
-def delete_word_from_database():
-    pass
+'''
+    Function that handles delete button actions
+'''
+def delete_button():
+    del_root = Tk()
+    del_root.resizable(False,False)
+    del_root.geometry("400x400")
+
+    def delete_action():
+        password = password_entry.get() #getting password
+        if(password!="#"):
+            del_root.destroy()
+            not_admin_root = Tk()
+            not_admin_root.geometry("300x300")
+            not_admin_root.resizable(False,False)
+            alert = Label(not_admin_root,text="Sorry, cannot continue you're no admin.",font=30,fg="red")
+            alert.place(x=10,y=120)
+            not_admin_root.mainloop()
+
+        else:
+            del_root.destroy()
+            yes_admin = Tk()
+            yes_admin.geometry("400x400")
+            yes_admin.resizable(False,False)
 
 
+
+            yes_admin.mainloop()
+            
+
+
+
+
+
+        
+    password_label = Label(del_root,text="Enter password",font=18)
+    password_label.place(x=110,y=80)
+
+    password_entry= Entry(del_root,font=20)
+    password_entry.place(x=110,y=100,width=180,height=30)
+
+    cont_button = Button(del_root,text="Continue =>",font=20,command=delete_action)
+    cont_button.place(x=150,y=180,height=50,width=100)
+
+
+    del_root.mainloop()
+
+# delete_button()
+
+
+
+# function to check user word exists or not 
 def check_user_word(word_by_user):
     load_words = json.loads(retrieve_data())
     words = [d["word"] for d in load_words]
@@ -297,7 +345,7 @@ def main():
     add_word_button.grid(row=0, column=0, padx=20, pady=5, sticky="e")
 
     delete_word_button = Button(
-        body_frame, text='Delete word', command=delete_word_from_database)
+        body_frame, text='Delete word', command=delete_button)
     delete_word_button.grid(row=0, column=1, padx=20, pady=5, sticky="e")
 
     # Place the Add and Delete buttons at the top right
