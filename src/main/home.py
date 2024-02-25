@@ -175,7 +175,7 @@ def delete_button():
     del_root.geometry("400x400")
 
     def delete_action():
-        password = password_entry.get().strip() #getting password
+        password = password_entry.get().strip().lower() #getting password
         if(password!=""):
             del_root.destroy()
             not_admin_root = Tk()
@@ -195,16 +195,27 @@ def delete_button():
             #function that handles delete button
             def delete_word():
                 by_user_word_to_delete =word_to_delete_entry.get().strip() 
-                word_des = json.loads(retrieve_data())
+                word_des_inside = json.loads(retrieve_data())
+
+                def check_word_existis_or_not():
+                    for entry in word_des_inside:
+                        if entry["word"] == by_user_word_to_delete:
+                            return True
+                    return False
+
+                    
                 
                 if by_user_word_to_delete=="":
                     word_error_msg.config(text="Word must be entered to proceed.")
-                elif by_user_word_to_delete=="":
-                    pass
 
+                elif not check_word_existis_or_not():
+                    word_error_msg.config(text="Word not found. Deletion failed")
+                    
                 else:
                     word_error_msg.destroy()
                     delete_word_inside.destroy()
+                    # print(f"test xxxxxxxxxxxxxx        :{word_des_inside}")
+                    
                     
 
                     def result_(msg):
@@ -218,9 +229,48 @@ def delete_button():
                         result_msg.config(fg="red")
 
                     def yes_pressed():
+
+                        def get_index_of_dict(word):
+                            for index, entry in enumerate(word_des_inside):
+                                if entry["word"] == word:
+                                    return index
+                            return None
+                        
+
+
+                        word_to_delete_dict_index = get_index_of_dict(by_user_word_to_delete)
+                        word_des_inside.pop(word_to_delete_dict_index)
+                        #after poping now update the data to db and update the ui
+
+                        #update the db with new word_list
+                        conn = sqlite3.connect('words.db')
+                        cursor = conn.cursor()
+
+                        #clear existing data
+                        cursor.execute('''DELETE FROM description''')
+
+                        #inserting the updated word list into the data base
+                        for word_entry in word_des_inside:
+                            cursor.execute('''INSERT INTO description(word, description) VALUES(?, ?)''',(word_entry['word'],word_entry['description']))
+
+                        conn.commit()
+                        conn.close()
+
+
+                        global word_list
+                        word_list = word_des_inside
+                        
+                        print(word_list)
+                        display_words_ui(body_frame)
+                        display_words()
+
+
+
                         confirm_label.destroy()
                         yes_button.destroy()
                         no_button.destroy()
+                        word_to_delete_label.destroy()
+                        word_to_delete_entry.destroy()             
                         result_("Word Deleted Sucessfully")
                     
 
