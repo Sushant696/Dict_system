@@ -72,7 +72,7 @@ top_frame.place(x=20, y=1, width=1160, height=80)
 
 # Main Body Container
 body_frame = Frame(root, borderwidth=6)
-body_frame.place(x=20, y=80, width=1160, height=660)
+body_frame.place(x=80, y=100, width=1160, height=660)
 
 # @@@@@
 
@@ -139,9 +139,8 @@ def update_word_window(word_id, current_word, current_description):
             conn.close()
             # Update the word_list and refresh the UI
             global word_list
-            word_list = [] # clearing the list so that the word will not overwride the previous word
+            word_list = []  # clearing the list so that the word will not overwride the previous word
             word_list = json.loads(retrieve_data())
-            display_words_ui(body_frame)
 
             # Close the update window
             display_words_ui(body_frame)
@@ -166,10 +165,16 @@ def update_word_window(word_id, current_word, current_description):
         new_word_entry.get(), new_description_entry.get()))
     update_button.grid(row=2, column=0, columnspan=2, pady=10)
 
+# Delete word from the database
+
+
+def delete_word_from_database():
+    pass
+
 
 def check_user_word(word_by_user):
-    load_words=json.loads(retrieve_data())
-    words=[d["word"] for d in load_words ]
+    load_words = json.loads(retrieve_data())
+    words = [d["word"] for d in load_words]
     if word_by_user in words:
         alert_message("Word already exits!")
     else:
@@ -178,7 +183,6 @@ def check_user_word(word_by_user):
 
 
 # Function that works when the add button is clicked and checks the boxes wheather they are empty or not
-
 def submit():
     global word_list
     word_list = []
@@ -199,7 +203,6 @@ def submit():
 
 
 # Function to get word and description by user
-
 def get_data():
     word_des = {
         'word': word.get(), "description": description.get(1.0, END).strip()}
@@ -245,11 +248,11 @@ for i in word_list:
 ###################################################################################################################################
 def display_words_ui(container_frame):
     for i, word_dict in enumerate(word_list):
-        word_frame = Frame(container_frame)
-        word_frame.grid(row=(i // 2) + 1, column=i %
-                        2, padx=70, pady=20, sticky="w")
+        word_frame = Frame(container_frame , relief="solid")
+        word_frame.grid(row=(i // 3), column=i %
+                        3, padx=60, pady=60, sticky="w")
 
-        word_label = Label(word_frame, text=f"{i + 1}. {word_dict['word']}", font=(
+        word_label = Label(word_frame, text=f"{word_dict['word']}", font=(
             "Helvetica", 12), justify="left", wraplength=400)
         word_label.grid(row=0, column=0, sticky="w")
 
@@ -259,8 +262,8 @@ def display_words_ui(container_frame):
 
         update_button = Button(word_frame, text="Update", command=lambda id=word_dict['id'], word=word_dict[
                                'word'], description=word_dict['description']: update_word_window(id, word, description))
-        update_button.grid(row=2, column=0, pady=5)
-
+        # Set sticky to "w" (west/left)
+        update_button.grid(row=2, column=0, pady=5, sticky="w")
 
 # @@@@@
 
@@ -291,7 +294,15 @@ def display_words():
 def main():
     add_word_button = Button(
         body_frame, text='Add New Word', command=add_word_window)
-    add_word_button.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+    add_word_button.grid(row=0, column=0, padx=20, pady=5, sticky="e")
+
+    delete_word_button = Button(
+        body_frame, text='Delete word', command=delete_word_from_database)
+    delete_word_button.grid(row=0, column=1, padx=20, pady=5, sticky="e")
+
+    # Place the Add and Delete buttons at the top right
+    add_word_button.place(x=380, y=1)
+    delete_word_button.place(x=500, y=1)
 
 
 # search function
