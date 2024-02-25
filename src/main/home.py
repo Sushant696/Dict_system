@@ -168,6 +168,8 @@ def update_word_window(word_id, current_word, current_description):
 
 
 def check_user_word(word_by_user):
+    load_words=json.loads(retrieve_data())
+    words=[d["word"] for d in load_words ]
     if word_by_user in words:
         alert_message("Word already exits!")
     else:
