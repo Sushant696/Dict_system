@@ -165,11 +165,9 @@ def update_word_window(word_id, current_word, current_description):
         new_word_entry.get(), new_description_entry.get()))
     update_button.grid(row=2, column=0, columnspan=2, pady=10)
 
-# Delete word from the database
-
 
 '''
-    Function that handles delete button actions
+    Function that handles delete button actions!!
 '''
 def delete_button():
     del_root = Tk()
@@ -177,8 +175,8 @@ def delete_button():
     del_root.geometry("400x400")
 
     def delete_action():
-        password = password_entry.get() #getting password
-        if(password!="#"):
+        password = password_entry.get().strip() #getting password
+        if(password!=""):
             del_root.destroy()
             not_admin_root = Tk()
             not_admin_root.geometry("300x300")
@@ -186,36 +184,86 @@ def delete_button():
             alert = Label(not_admin_root,text="Sorry, cannot continue you're no admin.",font=30,fg="red")
             alert.place(x=10,y=120)
             not_admin_root.mainloop()
-
         else:
             del_root.destroy()
             yes_admin = Tk()
             yes_admin.geometry("400x400")
             yes_admin.resizable(False,False)
+            word_error_msg = Label(yes_admin,text="",fg="red",font=20)
+            word_error_msg.place(x=80,y=330)
+
+            #function that handles delete button
+            def delete_word():
+                by_user_word_to_delete =word_to_delete_entry.get().strip() 
+                word_des = json.loads(retrieve_data())
+                
+                if by_user_word_to_delete=="":
+                    word_error_msg.config(text="Word must be entered to proceed.")
+                elif by_user_word_to_delete=="":
+                    pass
+
+                else:
+                    word_error_msg.destroy()
+                    delete_word_inside.destroy()
+                    
+
+                    def result_(msg):
+                        result_msg.config(text=f"ALERT: {msg}")
+
+                    def no_pressed():
+                        confirm_label.destroy()
+                        yes_button.destroy()
+                        no_button.destroy()
+                        result_("Word deletion canceled.")
+                        result_msg.config(fg="red")
+
+                    def yes_pressed():
+                        confirm_label.destroy()
+                        yes_button.destroy()
+                        no_button.destroy()
+                        result_("Word Deleted Sucessfully")
+                    
+
+                    
+                    confirm_label = Label(yes_admin,text="Are you sure?",fg="red",font=20)
+                    confirm_label.place(x=150,y=250,)
+                    yes_button=Button(yes_admin,text="Yes",command=yes_pressed)
+                    yes_button.place(x=110,y=280,width=80,height=40)
+                    no_button = Button(yes_admin,text="No",command=no_pressed)
+                    no_button.place(x=190,y=280,width=80,height=40)
+                    result_msg = Label(yes_admin,text="",fg="green")
+                    result_msg.place(x=110,y=330)
 
 
+
+
+            # labels, entries and buttons.
+            word_to_delete_label = Label(yes_admin,text="Enter the word to delete",font=18)
+            word_to_delete_label.place(x=50,y=50)
+            word_to_delete_entry = Entry(yes_admin,font=18)
+            word_to_delete_entry.place(x=50,y=80,width=200,height=30)
+            delete_word_inside = Button(yes_admin,text="Delete",command=delete_word)
+            delete_word_inside.place(x=100,y=150,height=40,width=80)
 
             yes_admin.mainloop()
             
 
-
-
-
-
-        
+   
     password_label = Label(del_root,text="Enter password",font=18)
     password_label.place(x=110,y=80)
-
     password_entry= Entry(del_root,font=20)
     password_entry.place(x=110,y=100,width=180,height=30)
-
     cont_button = Button(del_root,text="Continue =>",font=20,command=delete_action)
     cont_button.place(x=150,y=180,height=50,width=100)
 
-
     del_root.mainloop()
 
-# delete_button()
+
+
+
+
+
+###@@@###@@@##@@
 
 
 
