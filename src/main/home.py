@@ -72,7 +72,7 @@ top_frame.place(x=20, y=1, width=1160, height=80)
 
 # Main Body Container
 body_frame = Frame(root, borderwidth=6)
-body_frame.place(x=10, y=100, width=1160, height=660)
+body_frame.place(x=80, y=80, width=1160, height=660)
 
 words = []
 
@@ -410,14 +410,14 @@ def display_words_ui(container_frame):
     for i, word_dict in enumerate(word_list):
         word_frame = Frame(container_frame, relief="solid")
         word_frame.grid(row=(i // 3), column=i %
-                        3, padx=60, pady=40, sticky="w")
+                        3, padx=45, pady=55, sticky="w")
 
         word_label = Label(word_frame, text=f"{word_dict['word']}", font=(
-            "Helvetica", 12), justify="left", wraplength=320)
+            "Helvetica", 14), justify="left", wraplength=300)
         word_label.grid(row=0, column=0, sticky="w")
 
         word_des_label = Label(word_frame, text=f"{word_dict['description']}", font=(
-            "Helvetica", 14), justify="left", wraplength=320)
+            "Helvetica", 10), justify="left", wraplength=300)
         word_des_label.grid(row=1, column=0, sticky="w")
 
         update_button = Button(word_frame, text="Update", command=lambda id=word_dict['id'], word=word_dict[
@@ -440,8 +440,8 @@ def main():
     delete_word_button.grid(row=0, column=1, padx=20, pady=5, sticky="e")
 
     # Place the Add and Delete buttons at the top right
-    add_word_button.place(x=380, y=1)
-    delete_word_button.place(x=500, y=1)
+    add_word_button.place(x=960, y=1)
+    delete_word_button.place(x=1080, y=1)
 
     display_words()
 
@@ -449,7 +449,7 @@ def main():
 def search_bar():
     # search bar section
     global search_entry
-    search_entry = Entry(top_frame)
+    search_entry = Entry(top_frame,font=18)
     search_entry.place(x=460, y=5, width=620, height=40)
 
     logo_label = Label(top_frame, text='Dictionary App')
@@ -484,14 +484,14 @@ def search_word():
 def display_filtered_words(search_root, filteredWordList):
     for i, word_dict in enumerate(filteredWordList):
         word_frame = Frame(search_root, relief="solid")
-        word_frame.grid(row=i, column=0, padx=60, pady=40, sticky="w")
+        word_frame.grid(row=i, column=0, padx=20, pady=40, sticky="w")
 
         word_label = Label(word_frame, text=f"{word_dict['word']}", font=(
-            "Helvetica", 12), justify="left", wraplength=320)
+            "Helvetica", 14), justify="left", wraplength=320)
         word_label.grid(row=0, column=0, sticky="w")
 
         word_des_label = Label(word_frame, text=f"{word_dict['description']}", font=(
-            "Helvetica", 14), justify="left", wraplength=320)
+            "Helvetica", 10), justify="left", wraplength=320)
         word_des_label.grid(row=1, column=0, sticky="w")
 
         update_button = Button(word_frame, text="Update", command=lambda id=word_dict['id'], word=word_dict[
