@@ -38,7 +38,7 @@ def retrieve_data(id=None):
 
 
 word_list = json.loads(retrieve_data())
-print(word_list)
+# print(word_list)
 
 
 def update_word(word_id, new_word, new_description):
@@ -117,7 +117,7 @@ def add_word_window():
 def update_word_window(word_id, current_word, current_description):
     update_root = Tk()
     update_root.title(f"Update Word - {current_word}")
-    update_root.geometry("400x300")
+    update_root.geometry("500x500")
     update_root.resizable(0, 0)
 
     def update_word_in_database(new_word, new_description):
@@ -150,20 +150,27 @@ def update_word_window(word_id, current_word, current_description):
         except sqlite3.Error as e:
             print("SQLite error:", e)
 
+    word_label = Label(update_root, text="Word", font=16)
+    word_label.place(x=220, y=35)
+
+    description_label = Label(update_root, text="Description", font=16)
+    description_label.place(x=200, y=120)
+
     # Entry widgets
-    new_word_entry = Entry(update_root)
+    new_word_entry = Entry(update_root, font=16)
     new_word_entry.insert(0, current_word)
-    new_word_entry.pack(pady=10)
+    new_word_entry.place(x=100, y=60, width=300, height=30)
 
     new_description_entry = Text(update_root, width=40, height=5)
     new_description_entry.insert('1.0', current_description)
-    new_description_entry.pack(pady=10)
+    new_description_entry.place(x=50, y=150, height=200, width=400)
 
     # Update button
-    update_button = Button(update_root, text="Update", command=lambda: update_word_in_database(
-        new_word_entry.get().strip(),
-        new_description_entry.get('1.0', END).strip()), bg="#276640", fg="white")
-    update_button.pack(pady=10)
+    update_button = Button(update_root, text="Update",
+                           background="#3D9962", fg="white", command=lambda: update_word_in_database(
+                               new_word_entry.get().strip(),
+                               new_description_entry.get('1.0', END).strip()))
+    update_button.place(x=210, y=380, height=50, width=100)
 
     # Center the window on the screen
     update_root.eval('tk::PlaceWindow . center')
@@ -205,7 +212,7 @@ def delete_button():
                 by_user_word_to_delete = word_to_delete_entry.get().strip().lower()
                 word_des_inside = json.loads(retrieve_data())
 
-                def check_word_existis_or_not(): 
+                def check_word_existis_or_not():
                     for entry in word_des_inside:
                         if entry["word"] == by_user_word_to_delete:
                             return True
@@ -411,8 +418,8 @@ def display_words_ui(container_frame):
     # Destroy existing word frames
     for widget in existing_widgets:
         widget.destroy()
-    # above here destroyed the exising widget except the add word and delete word button
 
+    # above here destroyed the existing widget except the add word and delete word button
     for i, word_dict in enumerate(word_list):
         word_frame = Frame(container_frame, relief="solid")
         word_frame.grid(row=(i // 3), column=i %
@@ -427,7 +434,7 @@ def display_words_ui(container_frame):
         word_des_label.grid(row=1, column=0, sticky="w")
 
         update_button = Button(word_frame, text="Update", command=lambda id=word_dict['id'], word=word_dict[
-                               'word'], description=word_dict['description']: update_word_window(id, word, description))
+                               'word'], description=word_dict['description']: update_word_window(id, word, description), bg="#3D9962", fg="white")
         # Set sticky to "w" (west/left)
         update_button.grid(row=2, column=0, pady=5, sticky="w")
 
@@ -470,11 +477,26 @@ def search_word():
 
     if not user_search_input:
         # If the search input is empty, simply return without opening a window
+        user_search_input = 'Empty search'
+        
         return
 
     search_root = Tk()
     search_root.resizable(False, False)
     search_root.geometry("500x500")
+
+    # Create a canvas for the scrollable area
+    canvas = Canvas(search_root, height=500)
+    canvas.pack(side="left", fill="both", expand=True)
+
+    # Add a scrollbar to the canvas
+    scrollbar = Scrollbar(search_root, command=canvas.yview)
+    scrollbar.pack(side="right", fill="y")
+    canvas.configure(yscrollcommand=scrollbar.set)
+
+    # Create a frame to hold the search results
+    result_frame = Frame(canvas)
+    canvas.create_window((0, 0), window=result_frame, anchor="nw")
 
     # First filter the word list
     def filter_items(word_dict):
@@ -483,18 +505,30 @@ def search_word():
     filteredWordList = list(filter(filter_items, word_list))
 
     if filteredWordList:
-        display_filtered_words(search_root, filteredWordList)
-        search_result = Label(search_root, text="Search result....", font=("Helvetica", 16, "bold"))
+        display_filtered_words(result_frame, filteredWordList)
+        search_result = Label(
+            result_frame, text="Search result....", font=("Helvetica", 16, "bold"))
         search_result.place(x=10, y=10)
 
-
     else:
-        no_result_label = Label(search_root, text="No matching words found.")
+        no_result_label = Label(result_frame, text="No matching words found.")
         no_result_label.pack()
 
-    search_root.mainloop()
+    result_frame.update_idletasks()
+    canvas.config(scrollregion=canvas.bbox("all"))
+
 
 def display_filtered_words(search_root, filteredWordList):
+     # Get the list of existing widgets
+    widgets = search_root.winfo_children()
+
+    # Skip the first two widgets (assuming they are the Add New Word and Delete Word buttons)
+    existing_widgets = widgets[2:]
+
+    # Destroy existing word frames
+    for widget in existing_widgets:
+        widget.destroy()
+    
     for i, word_dict in enumerate(filteredWordList):
         word_frame = Frame(search_root, relief="solid")
         word_frame.grid(row=i, column=0, padx=20, pady=40, sticky="w")
@@ -508,7 +542,7 @@ def display_filtered_words(search_root, filteredWordList):
         word_des_label.grid(row=1, column=0, sticky="w")
 
         update_button = Button(word_frame, text="Update", command=lambda id=word_dict['id'], word=word_dict[
-            'word'], description=word_dict['description']: update_word_window(id, word, description))
+                               'word'], description=word_dict['description']: update_word_window(id, word, description), bg="#3D9962", fg="white")
 
         # Set sticky to "w" (west/left)
         update_button.grid(row=2, column=0, pady=5, sticky="w")
