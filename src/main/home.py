@@ -268,25 +268,25 @@ def delete_button():
 
                     confirm_label = Label(
                         yes_admin, text="Are you sure?", fg="red", font=20)
-                    confirm_label.place(x=150, y=250,)
+                    confirm_label.place(x=160, y=250,)
                     yes_button = Button(
                         yes_admin, text="Yes", command=yes_pressed)
-                    yes_button.place(x=110, y=280, width=80, height=40)
+                    yes_button.place(x=120, y=280, width=80, height=40)
                     no_button = Button(yes_admin, text="No",
                                        command=no_pressed)
-                    no_button.place(x=190, y=280, width=80, height=40)
+                    no_button.place(x=200, y=280, width=80, height=40)
                     result_msg = Label(yes_admin, text="", fg="green")
                     result_msg.place(x=110, y=330)
 
             # labels, entries and buttons.
             word_to_delete_label = Label(
                 yes_admin, text="Enter the word to delete", font=18)
-            word_to_delete_label.place(x=50, y=50)
+            word_to_delete_label.place(x=120, y=50)
             word_to_delete_entry = Entry(yes_admin, font=18)
-            word_to_delete_entry.place(x=50, y=80, width=200, height=30)
+            word_to_delete_entry.place(x=100, y=80, width=200, height=30)
             delete_word_inside = Button(
                 yes_admin, text="Delete", command=delete_word)
-            delete_word_inside.place(x=100, y=150, height=40, width=80)
+            delete_word_inside.place(x=150, y=150, height=50, width=100)
 
             yes_admin.mainloop()
 
