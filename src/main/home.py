@@ -375,11 +375,6 @@ for i in word_list:
     words.append(i["word"].lower())
 
 
-root = Tk()
-root.geometry('1200x750')
-root.title('Dictionary System')
-root.resizable(False, False)
-
 # top header container
 top_frame = Frame(root, borderwidth=6, bg='green')
 top_frame.place(x=20, y=1, width=1160, height=80)
@@ -424,10 +419,6 @@ def display_words_ui(container_frame):
         update_button.grid(row=2, column=0, pady=5, sticky="w")
 
 
-# def search_word():
-#     pass
-#     # word_label = Label(root, text='text')
-#     # word_label.place(x=20, y=50, width=80, height=50)
 def display_words():
     display_words_ui(body_frame)
 
@@ -445,10 +436,12 @@ def main():
     add_word_button.place(x=380, y=1)
     delete_word_button.place(x=500, y=1)
 
+    display_words()
+
 
 def search_bar():
-
     # search bar section
+    global search_entry
     search_entry = Entry(top_frame)
     search_entry.place(x=460, y=5, width=620, height=40)
 
@@ -460,12 +453,48 @@ def search_bar():
 
 
 def search_word():
-    print(word_list, 'word list right now')
+    search_root = Tk()
+    search_root.resizable(False, False)
+    search_root.geometry("400x400")
+
+    user_search_input = search_entry.get().lower()
+
+    # First filter the word list
+    def filter_items(word_dict):
+        return user_search_input in word_dict['word'].lower()
+
+    filteredWordList = list(filter(filter_items, word_list))
+
+    if filteredWordList:
+        display_filtered_words(search_root, filteredWordList)
+    else:
+        no_result_label = Label(search_root, text="No matching words found.")
+        no_result_label.pack()
+
+    search_root.mainloop()
+
+
+def display_filtered_words(search_root, filteredWordList):
+    for i, word_dict in enumerate(filteredWordList):
+        word_frame = Frame(search_root, relief="solid")
+        word_frame.grid(row=i, column=0, padx=60, pady=40, sticky="w")
+
+        word_label = Label(word_frame, text=f"{word_dict['word']}", font=(
+            "Helvetica", 12), justify="left", wraplength=320)
+        word_label.grid(row=0, column=0, sticky="w")
+
+        word_des_label = Label(word_frame, text=f"{word_dict['description']}", font=(
+            "Helvetica", 14), justify="left", wraplength=320)
+        word_des_label.grid(row=1, column=0, sticky="w")
+
+        update_button = Button(word_frame, text="Update", command=lambda id=word_dict['id'], word=word_dict[
+            'word'], description=word_dict['description']: update_word_window(id, word, description))
+
+        # Set sticky to "w" (west/left)
+        update_button.grid(row=2, column=0, pady=5, sticky="w")
 
 
 # search function
 search_bar()
 main()
-display_words()
-
 root.mainloop()
