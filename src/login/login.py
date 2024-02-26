@@ -55,6 +55,13 @@ def fetch_all_users():
 
     return users
 
+# Function to toggle password visibility
+def toggle_password_visibility(entry_widget, visibility_var):
+    if visibility_var.get():
+        entry_widget.config(show="")
+    else:
+        entry_widget.config(show="•")
+
 # Function to create the login window
 def create_login_window():
     create_database()
@@ -109,6 +116,12 @@ def create_login_window():
 
     password_entry = Entry(right_frame, font=("Helvetica", 14), bd=5, relief="flat", justify="center", show="•")
     password_entry.place(relx=0.6, rely=0.40, anchor="center", width=200)
+
+    password_visibility_var = BooleanVar()
+    password_visibility_check = Checkbutton(right_frame, text="Show Password", variable=password_visibility_var,
+                                             command=lambda: toggle_password_visibility(password_entry, password_visibility_var),
+                                             bg="#D9D9D9", fg="black", selectcolor="#D9D9D9")
+    password_visibility_check.place(relx=0.5, rely=0.5, anchor="center")
 
     result_label = Label(right_frame, text="", font=("Helvetica", 12), fg="green", bg="#D9D9D9")
     result_label.place(relx=0.5, rely=0.85, anchor="center")
@@ -182,6 +195,9 @@ def create_login_window():
     registration_result_label = Label(registration_right_frame, text="", font=("Helvetica", 12), fg="green", bg="#D9D9D9")
     registration_result_label.place(relx=0.5, rely=0.85, anchor="center")
 
+    # Function to toggle password visibility in registration page
+
+
     # Function to switch to the login view
     def switch_to_login_view():
         registration_window.withdraw()  # Hide registration window
@@ -197,11 +213,15 @@ def create_login_window():
         email = registration_email_entry.get()
         username = registration_username_entry.get()
         password = registration_password_entry.get()
+        retyped_password = registration_retype_password_entry.get()
 
-        if name and email and username and password:
-            # Inserting the user into the database
-            insert_user(username, password)
-            registration_result_label.config(text="User has been registered successfully.", fg="green")
+        if name and email and username and password and retyped_password:
+            if password == retyped_password:
+                # Inserting the user into the database
+                insert_user(username, password)
+                registration_result_label.config(text="User has been registered successfully.", fg="green")
+            else:
+                registration_result_label.config(text="Passwords do not match. Please retype the password.", fg="red")
         else:
             registration_result_label.config(text="Please fill in all fields.", fg="red")
 
