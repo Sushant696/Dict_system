@@ -134,9 +134,10 @@ def update_word_window(word_id, current_word, current_description):
 
             # Close database connection
             conn.close()
+
             # Update the word_list and refresh the UI
             global word_list
-            word_list = []  # clearing the list so that the word will not overwride the previous word
+            word_list = []  # clearing the list so that the word will not overwrite the previous word
             word_list = json.loads(retrieve_data())
 
             # Close the update window
@@ -150,17 +151,23 @@ def update_word_window(word_id, current_word, current_description):
 
     # Entry widgets
     new_word_entry = Entry(update_root)
-    new_word_entry.grid(row=0, column=1, pady=10)
     new_word_entry.insert(0, current_word)
+    new_word_entry.pack(pady=10)
 
-    new_description_entry = Entry(update_root)
-    new_description_entry.grid(row=1, column=1, pady=10)
-    new_description_entry.insert(0, current_description)
+    new_description_entry = Text(update_root, width=40, height=1)
+    new_description_entry.insert('1.0', current_description)
+    new_description_entry.pack(pady=10)
 
     # Update button
     update_button = Button(update_root, text="Update", command=lambda: update_word_in_database(
-        new_word_entry.get(), new_description_entry.get()))
-    update_button.grid(row=2, column=0, columnspan=2, pady=10)
+        new_word_entry.get(),
+        new_description_entry.get('1.0', END)), bg="#276640", fg="white")
+    update_button.pack(pady=10)
+
+    # Center the window on the screen
+    update_root.eval('tk::PlaceWindow . center')
+
+    update_root.mainloop()
 
 
 '''
@@ -453,11 +460,15 @@ def search_bar():
 
 
 def search_word():
+    user_search_input = search_entry.get().lower()
+
+    if not user_search_input:
+        # If the search input is empty, simply return without opening a window
+        return
+
     search_root = Tk()
     search_root.resizable(False, False)
-    search_root.geometry("400x400")
-
-    user_search_input = search_entry.get().lower()
+    search_root.geometry("500x500")
 
     # First filter the word list
     def filter_items(word_dict):
@@ -472,6 +483,7 @@ def search_word():
         no_result_label.pack()
 
     search_root.mainloop()
+
 
 
 def display_filtered_words(search_root, filteredWordList):
