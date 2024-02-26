@@ -181,7 +181,7 @@ def delete_button():
             not_admin_root.geometry("300x300")
             not_admin_root.resizable(False, False)
             alert = Label(
-                not_admin_root, text="Sorry, cannot continue you're no admin.", font=30, fg="red")
+                not_admin_root, text="Sorry, Unauthorized access denied.", font=30, fg="red")
             alert.place(x=10, y=120)
             not_admin_root.mainloop()
         else:
@@ -290,7 +290,7 @@ def delete_button():
 
             yes_admin.mainloop()
 
-    password_label = Label(del_root, text="Enter token to continue", font=18)
+    password_label = Label(del_root, text="Enter Authorization Code", font=18)
     password_label.place(x=110, y=80)
     password_entry = Entry(del_root, font=20)
     password_entry.place(x=110, y=100, width=180, height=30)
