@@ -98,7 +98,7 @@ def add_word_window():
     description.place(x=50, y=150, height=200, width=400)
 
     # This is the button to submit / add word to the dictionary
-    add_button = Button(add_root, text="Add", command=submit)
+    add_button = Button(add_root, text="Add",background="#3D9962",fg="white", command=submit)
     add_button.place(x=210, y=380, height=50, width=100)
 
     # This is label for alert message output
@@ -223,6 +223,8 @@ def delete_button():
                         confirm_label.destroy()
                         yes_button.destroy()
                         no_button.destroy()
+                        word_to_delete_label.destroy()
+                        word_to_delete_entry.destroy()
                         result_("Word deletion canceled.")
                         result_msg.config(fg="red")
 
@@ -265,14 +267,16 @@ def delete_button():
                         word_to_delete_label.destroy()
                         word_to_delete_entry.destroy()
                         result_("Word Deleted Sucessfully")
+                    
+
 
                     confirm_label = Label(
                         yes_admin, text="Are you sure?", fg="red", font=20)
                     confirm_label.place(x=160, y=250,)
                     yes_button = Button(
-                        yes_admin, text="Yes", command=yes_pressed)
+                        yes_admin, text="Yes",background="#3D9962",fg="white", command=yes_pressed)
                     yes_button.place(x=120, y=280, width=80, height=40)
-                    no_button = Button(yes_admin, text="No",
+                    no_button = Button(yes_admin, text="No",background="red",fg="white",
                                        command=no_pressed)
                     no_button.place(x=200, y=280, width=80, height=40)
                     result_msg = Label(yes_admin, text="", fg="green")
@@ -285,7 +289,7 @@ def delete_button():
             word_to_delete_entry = Entry(yes_admin, font=18)
             word_to_delete_entry.place(x=100, y=80, width=200, height=30)
             delete_word_inside = Button(
-                yes_admin, text="Delete", command=delete_word)
+                yes_admin, text="Delete",background="#3D9962",fg="white", command=delete_word)
             delete_word_inside.place(x=150, y=150, height=50, width=100)
 
             yes_admin.mainloop()
@@ -295,7 +299,7 @@ def delete_button():
     password_entry = Entry(del_root, font=20)
     password_entry.place(x=110, y=100, width=180, height=30)
     cont_button = Button(del_root, text="Continue =>",
-                         font=20, command=delete_action)
+                         font=20,background="#3D9962",fg="white", command=delete_action)
     cont_button.place(x=150, y=180, height=50, width=100)
 
     del_root.mainloop()
@@ -306,10 +310,13 @@ def check_user_word(word_by_user):
     load_words = json.loads(retrieve_data())
     words = [d["word"] for d in load_words]
     if word_by_user in words:
-        alert_message("Word already exits!")
+        alert_message(" Word already exits!")
+        alert.config(fg="red")
+
     else:
         get_data()
-        alert_message("Word Added Sucessfully!")
+        alert.config(fg="green")
+        alert_message(" Word Added Sucessfully!")
 
 
 # Function that works when the add button is clicked and checks the boxes wheather they are empty or not
@@ -367,7 +374,7 @@ def get_data():
 
 
 def alert_message(message):
-    alert.config(text=f"INFO : {message}")
+    alert.config(text=f"ALERT! {message}")
 
 
 # loop that appends the "all the words that are comming" to the varible named words.
@@ -425,11 +432,11 @@ def display_words():
 
 def main():
     add_word_button = Button(
-        body_frame, text='Add New Word', command=add_word_window)
+        body_frame, text='Add New Word',background="#3D9962",fg="white", command=add_word_window)
     add_word_button.grid(row=0, column=0, padx=20, pady=5, sticky="e")
 
     delete_word_button = Button(
-        body_frame, text='Delete word', command=delete_button)
+        body_frame, text='Delete word',background="#3D9962",fg="white", command=delete_button)
     delete_word_button.grid(row=0, column=1, padx=20, pady=5, sticky="e")
 
     # Place the Add and Delete buttons at the top right
