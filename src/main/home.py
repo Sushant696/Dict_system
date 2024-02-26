@@ -24,7 +24,7 @@ def retrieve_data(id=None):
             # Execute the SQL query to retrieve all data
             cursor.execute('''SELECT * FROM description''')
             data = cursor.fetchall()
-            result = [{"id": row[0], "word": row[1], "description": row[2]}
+            result = [{"id": row[0], "word": row[1].lower(), "description": row[2]}
                       for row in data]
 
         # Close the database connection
@@ -202,10 +202,10 @@ def delete_button():
 
             # function that handles delete button
             def delete_word():
-                by_user_word_to_delete = word_to_delete_entry.get().strip()
+                by_user_word_to_delete = word_to_delete_entry.get().strip().lower()
                 word_des_inside = json.loads(retrieve_data())
 
-                def check_word_existis_or_not():
+                def check_word_existis_or_not(): 
                     for entry in word_des_inside:
                         if entry["word"] == by_user_word_to_delete:
                             return True
