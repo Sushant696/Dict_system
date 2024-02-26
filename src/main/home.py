@@ -459,34 +459,40 @@ def search_word():
 
     user_search_input = search_entry.get().lower()
 
-    print('word list right now', user_search_input)
-
     # First filter the word list
     def filter_items(word_dict):
         return user_search_input in word_dict['word'].lower()
 
     filteredWordList = list(filter(filter_items, word_list))
-    print(filteredWordList)
 
-    def display_filtered_words():
-        for i, word_dict in enumerate(filteredWordList):
-            word_frame = Frame(search_root, relief="solid")
-            word_frame.grid(row=i, column=i, padx=60, pady=40, sticky="w")
+    if filteredWordList:
+        display_filtered_words(search_root, filteredWordList)
+    else:
+        no_result_label = Label(search_root, text="No matching words found.")
+        no_result_label.pack()
 
-            word_label = Label(search_root, text=f"{word_dict['word']}", font=(
-                "Helvetica", 12), justify="left", wraplength=320)
-            word_label.grid(row=0, column=0, sticky="w")
+    search_root.mainloop()
 
-            word_des_label = Label(search_root, text=f"{word_dict['description']}", font=(
-                "Helvetica", 14), justify="left", wraplength=320)
-            word_des_label.grid(row=1, column=0, sticky="w")
 
-            update_button = Button(search_root, text="Update", command=lambda id=word_dict['id'], word=word_dict[
-                'word'], description=word_dict['description']: update_word_window(id, word, description))
+def display_filtered_words(search_root, filteredWordList):
+    for i, word_dict in enumerate(filteredWordList):
+        word_frame = Frame(search_root, relief="solid")
+        word_frame.grid(row=i, column=0, padx=60, pady=40, sticky="w")
+
+        word_label = Label(word_frame, text=f"{word_dict['word']}", font=(
+            "Helvetica", 12), justify="left", wraplength=320)
+        word_label.grid(row=0, column=0, sticky="w")
+
+        word_des_label = Label(word_frame, text=f"{word_dict['description']}", font=(
+            "Helvetica", 14), justify="left", wraplength=320)
+        word_des_label.grid(row=1, column=0, sticky="w")
+
+        update_button = Button(word_frame, text="Update", command=lambda id=word_dict['id'], word=word_dict[
+            'word'], description=word_dict['description']: update_word_window(id, word, description))
 
         # Set sticky to "w" (west/left)
-            update_button.grid(row=2, column=0, pady=5, sticky="w")
-            
+        update_button.grid(row=2, column=0, pady=5, sticky="w")
+
 
 # search function
 search_bar()
