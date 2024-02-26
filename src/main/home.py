@@ -98,7 +98,8 @@ def add_word_window():
     description.place(x=50, y=150, height=200, width=400)
 
     # This is the button to submit / add word to the dictionary
-    add_button = Button(add_root, text="Add",background="#3D9962",fg="white", command=submit)
+    add_button = Button(add_root, text="Add",
+                        background="#3D9962", fg="white", command=submit)
     add_button.place(x=210, y=380, height=50, width=100)
 
     # This is label for alert message output
@@ -116,7 +117,7 @@ def add_word_window():
 def update_word_window(word_id, current_word, current_description):
     update_root = Tk()
     update_root.title(f"Update Word - {current_word}")
-    update_root.geometry("400x200")
+    update_root.geometry("400x300")
     update_root.resizable(0, 0)
 
     def update_word_in_database(new_word, new_description):
@@ -154,14 +155,14 @@ def update_word_window(word_id, current_word, current_description):
     new_word_entry.insert(0, current_word)
     new_word_entry.pack(pady=10)
 
-    new_description_entry = Text(update_root, width=40, height=1)
+    new_description_entry = Text(update_root, width=40, height=5)
     new_description_entry.insert('1.0', current_description)
     new_description_entry.pack(pady=10)
 
     # Update button
     update_button = Button(update_root, text="Update", command=lambda: update_word_in_database(
-        new_word_entry.get(),
-        new_description_entry.get('1.0', END)), bg="#276640", fg="white")
+        new_word_entry.get().strip(),
+        new_description_entry.get('1.0', END).strip()), bg="#276640", fg="white")
     update_button.pack(pady=10)
 
     # Center the window on the screen
@@ -274,16 +275,14 @@ def delete_button():
                         word_to_delete_label.destroy()
                         word_to_delete_entry.destroy()
                         result_("Word Deleted Sucessfully")
-                    
-
 
                     confirm_label = Label(
                         yes_admin, text="Are you sure?", fg="red", font=20)
                     confirm_label.place(x=160, y=250,)
                     yes_button = Button(
-                        yes_admin, text="Yes",background="#3D9962",fg="white", command=yes_pressed)
+                        yes_admin, text="Yes", background="#3D9962", fg="white", command=yes_pressed)
                     yes_button.place(x=120, y=280, width=80, height=40)
-                    no_button = Button(yes_admin, text="No",background="red",fg="white",
+                    no_button = Button(yes_admin, text="No", background="red", fg="white",
                                        command=no_pressed)
                     no_button.place(x=200, y=280, width=80, height=40)
                     result_msg = Label(yes_admin, text="", fg="green")
@@ -296,7 +295,7 @@ def delete_button():
             word_to_delete_entry = Entry(yes_admin, font=18)
             word_to_delete_entry.place(x=100, y=80, width=200, height=30)
             delete_word_inside = Button(
-                yes_admin, text="Delete",background="#3D9962",fg="white", command=delete_word)
+                yes_admin, text="Delete", background="#3D9962", fg="white", command=delete_word)
             delete_word_inside.place(x=150, y=150, height=50, width=100)
 
             yes_admin.mainloop()
@@ -306,7 +305,7 @@ def delete_button():
     password_entry = Entry(del_root, font=20)
     password_entry.place(x=110, y=100, width=180, height=30)
     cont_button = Button(del_root, text="Continue =>",
-                         font=20,background="#3D9962",fg="white", command=delete_action)
+                         font=20, background="#3D9962", fg="white", command=delete_action)
     cont_button.place(x=150, y=180, height=50, width=100)
 
     del_root.mainloop()
@@ -417,7 +416,7 @@ def display_words_ui(container_frame):
     for i, word_dict in enumerate(word_list):
         word_frame = Frame(container_frame, relief="solid")
         word_frame.grid(row=(i // 3), column=i %
-                        3, padx=45, pady=55, sticky="w")
+                        3, padx=45, pady=45, sticky="w")
 
         word_label = Label(word_frame, text=f"{word_dict['word']}", font=(
             "Helvetica", 14), justify="left", wraplength=300)
@@ -439,11 +438,11 @@ def display_words():
 
 def main():
     add_word_button = Button(
-        body_frame, text='Add New Word',background="#3D9962",fg="white", command=add_word_window)
+        body_frame, text='Add New Word', background="#3D9962", fg="white", command=add_word_window)
     add_word_button.grid(row=0, column=0, padx=20, pady=5, sticky="e")
 
     delete_word_button = Button(
-        body_frame, text='Delete word',background="#3D9962",fg="white", command=delete_button)
+        body_frame, text='Delete word', background="#3D9962", fg="white", command=delete_button)
     delete_word_button.grid(row=0, column=1, padx=20, pady=5, sticky="e")
 
     # Place the Add and Delete buttons at the top right
@@ -456,7 +455,7 @@ def main():
 def search_bar():
     # search bar section
     global search_entry
-    search_entry = Entry(top_frame,font=18)
+    search_entry = Entry(top_frame, font=18)
     search_entry.place(x=460, y=5, width=620, height=40)
 
     logo_label = Label(top_frame, text='Dictionary App')
@@ -485,13 +484,15 @@ def search_word():
 
     if filteredWordList:
         display_filtered_words(search_root, filteredWordList)
+        search_result = Label(search_root, text="Search result....", font=("Helvetica", 16, "bold"))
+        search_result.place(x=10, y=10)
+
+
     else:
         no_result_label = Label(search_root, text="No matching words found.")
         no_result_label.pack()
 
     search_root.mainloop()
-
-
 
 def display_filtered_words(search_root, filteredWordList):
     for i, word_dict in enumerate(filteredWordList):
