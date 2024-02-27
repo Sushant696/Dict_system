@@ -13,6 +13,8 @@ def create_database():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
             username TEXT NOT NULL,
             password TEXT NOT NULL
         )
@@ -21,12 +23,13 @@ def create_database():
     connection.commit()
     connection.close()
 
+
 # Function to insert a new user into the 'users' table
-def insert_user(username, password):
+def insert_user(name, email, username, password):
     connection = sqlite3.connect("users.db")
     cursor = connection.cursor()
 
-    cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
+    cursor.execute('INSERT INTO users (name, email, username, password) VALUES (?, ?, ?, ?)', (name, email, username, password))
 
     connection.commit()
     connection.close()
@@ -58,6 +61,15 @@ def fetch_all_users():
 # Function to create the login window
 def create_login_window():
     create_database()
+
+    # Function to handle login button click
+    def toggle_password_visibility():
+        if password_entry['show'] == '•':
+            password_entry.config(show='')
+            show_hide_button.config(text="Hide Password")
+        else:
+            password_entry.config(show='•')
+            show_hide_button.config(text="Show Password")
 
     # Function to handle login button click
     def login_action():
@@ -110,8 +122,12 @@ def create_login_window():
     password_entry = Entry(right_frame, font=("Helvetica", 14), bd=5, relief="flat", justify="center", show="•")
     password_entry.place(relx=0.6, rely=0.40, anchor="center", width=200)
 
+    show_hide_button = Button(right_frame, text="Show Password", font=("Helvetica", 10), bg="#D9D9D9", fg="black", command=toggle_password_visibility)
+    show_hide_button.place(relx=0.50, rely=0.5, anchor="center")
+
     result_label = Label(right_frame, text="", font=("Helvetica", 12), fg="green", bg="#D9D9D9")
     result_label.place(relx=0.5, rely=0.85, anchor="center")
+
 
     # Function to switch to the registration view
     def switch_to_registration_view():
@@ -197,11 +213,18 @@ def create_login_window():
         email = registration_email_entry.get()
         username = registration_username_entry.get()
         password = registration_password_entry.get()
+        retype_password = registration_retype_password_entry.get()
 
-        if name and email and username and password:
-            # Inserting the user into the database
-            insert_user(username, password)
-            registration_result_label.config(text="User has been registered successfully.", fg="green")
+        if name and email and username and password and retype_password:
+            if password == retype_password:
+                if email.endswith(".com"):
+                    # Inserting the user into the database
+                    insert_user(name, email, username, password)
+                    registration_result_label.config(text="User has been registered successfully.", fg="green")
+                else:
+                    registration_result_label.config(text="Please provide a Gmail account.", fg="red")
+            else:
+                registration_result_label.config(text="Passwords do not match.", fg="red")
         else:
             registration_result_label.config(text="Please fill in all fields.", fg="red")
 
