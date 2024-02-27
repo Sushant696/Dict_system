@@ -1,3 +1,4 @@
+# import tkinter as tk
 from tkinter import *
 import sqlite3
 import json
@@ -62,17 +63,17 @@ def update_word(word_id, new_word, new_description):
 
 
 root = Tk()
-root.geometry('1200x750')
+root.geometry('1200x780')
 root.title('Dictionary System')
 root.resizable(False, False)
 
-# top header container
+# Top header container
 top_frame = Frame(root, borderwidth=6, bg='green')
-top_frame.place(x=20, y=1, width=1160, height=80)
+top_frame.place(x=20, y=1, width=1160, height=160)
 
 # Main Body Container
-body_frame = Frame(root, borderwidth=6)
-body_frame.place(x=80, y=80, width=1160, height=660)
+body_frame = Frame(root)
+body_frame.place(x=50, y=191, width=1160, height=718)
 
 words = []
 
@@ -397,11 +398,11 @@ for i in word_list:
 
 # top header container
 top_frame = Frame(root, borderwidth=6, bg='green')
-top_frame.place(x=20, y=1, width=1160, height=80)
+top_frame.place(x=20, y=1, width=1160, height=100)
 
 # Main Body Container
 body_frame = Frame(root, borderwidth=6)
-body_frame.place(x=10, y=100, width=1160, height=660)
+body_frame.place(x=19.5, y=100, width=1160, height=750)
 
 words = []
 
@@ -421,22 +422,36 @@ def display_words_ui(container_frame):
 
     # above here destroyed the existing widget except the add word and delete word button
     for i, word_dict in enumerate(word_list):
-        word_frame = Frame(container_frame, relief="solid")
+
+        # Add border thickness with bd=1
+        word_frame = Frame(body_frame, relief="solid")
         word_frame.grid(row=(i // 3), column=i %
-                        3, padx=45, pady=45, sticky="w")
+                        3, padx=35, pady=50, sticky="w")
+
+        word_frame.bind("<Enter>", on_enter)  # Bind event for hover enter
+        word_frame.bind("<Leave>", on_leave)  # Bind event for hover leave
 
         word_label = Label(word_frame, text=f"{word_dict['word']}", font=(
-            "Helvetica", 14), justify="left", wraplength=300)
+            "Helvetica", 14), justify="left", wraplength=320)
         word_label.grid(row=0, column=0, sticky="w")
 
         word_des_label = Label(word_frame, text=f"{word_dict['description']}", font=(
-            "Helvetica", 10), justify="left", wraplength=300)
+            "Helvetica", 10), justify="left", wraplength=320)
         word_des_label.grid(row=1, column=0, sticky="w")
 
         update_button = Button(word_frame, text="Update", command=lambda id=word_dict['id'], word=word_dict[
-                               'word'], description=word_dict['description']: update_word_window(id, word, description), bg="#3D9962", fg="white")
-        # Set sticky to "w" (west/left)
+            'word'], description=word_dict['description']: update_word_window(id, word, description), bg="#3D9962", fg="white")
         update_button.grid(row=2, column=0, pady=5, sticky="w")
+
+
+def on_enter(event):
+    # Change background color on hover
+    event.widget.config(bd=1)  # Customize as desired
+
+
+def on_leave(event):
+    # Restore original background color
+    event.widget.config(bd=0)  # Customize as desired
 
 
 def display_words():
@@ -458,18 +473,34 @@ def main():
 
     display_words()
 
+#  ##########################################################################################################################################
+
 
 def search_bar():
-    # search bar section
+    # Search bar section
     global search_entry
     search_entry = Entry(top_frame, font=18)
-    search_entry.place(x=460, y=5, width=620, height=40)
+    search_entry.place(x=460, y=15, width=620, height=40)
 
-    logo_label = Label(top_frame, text='Dictionary App')
-    logo_label.place(x=20, y=5, width=80, height=50)
+    # search_image = PhotoImage(
+    #     file="S:/Python/Collage Project/Tkinter_dict/src/main/logo1.svg")
 
-    search_button = Button(top_frame, text='Search', command=search_word)
-    search_button.place(x=1050, y=5, width=80, height=41)
+    # Creating a PhotoImage object to use the image
+    logo_image = PhotoImage(
+        file="S:/Python/Collage Project/Tkinter_dict/src/main/mainlogo.png")
+
+    # resized_image = logo_image.subsample(1, 1)
+
+    # Create a label to display the image
+    logo_label = Label(top_frame, image=logo_image, borderwidth=1)
+    logo_label.image = logo_image  # Keep a reference to avoid garbage collection
+    logo_label.pack(side="left", padx=0, pady=0, ipadx=50, ipady=290)
+
+    # Create a button with the image
+    search_button = Button(top_frame, text='Search',
+                           #    image=photo,
+                           command=search_word, compound="left")
+    search_button.place(x=1050, y=15, width=80, height=41)
 
 
 def search_word():
@@ -478,12 +509,13 @@ def search_word():
     if not user_search_input:
         # If the search input is empty, simply return without opening a window
         user_search_input = 'Empty search'
-        
+
         return
 
     search_root = Tk()
     search_root.resizable(False, False)
     search_root.geometry("500x500")
+    search_root.title("searched words")
 
     # Create a canvas for the scrollable area
     canvas = Canvas(search_root, height=500)
@@ -507,8 +539,8 @@ def search_word():
     if filteredWordList:
         display_filtered_words(result_frame, filteredWordList)
         search_result = Label(
-            result_frame, text="Search result....", font=("Helvetica", 16, "bold"))
-        search_result.place(x=10, y=10)
+            result_frame, text=f"Search result for - {user_search_input} ", font=("Helvetica", 16, "bold"))
+        search_result.place(x=10, y=5)
 
     else:
         no_result_label = Label(result_frame, text="No matching words found.")
@@ -519,7 +551,7 @@ def search_word():
 
 
 def display_filtered_words(search_root, filteredWordList):
-     # Get the list of existing widgets
+    # Get the list of existing widgets
     widgets = search_root.winfo_children()
 
     # Skip the first two widgets (assuming they are the Add New Word and Delete Word buttons)
@@ -528,10 +560,10 @@ def display_filtered_words(search_root, filteredWordList):
     # Destroy existing word frames
     for widget in existing_widgets:
         widget.destroy()
-    
+
     for i, word_dict in enumerate(filteredWordList):
         word_frame = Frame(search_root, relief="solid")
-        word_frame.grid(row=i, column=0, padx=20, pady=40, sticky="w")
+        word_frame.grid(row=i, column=0, padx=20, pady=30, sticky="w")
 
         word_label = Label(word_frame, text=f"{word_dict['word']}", font=(
             "Helvetica", 14), justify="left", wraplength=320)
