@@ -75,15 +75,12 @@ top_frame.place(x=20, y=1, width=1160, height=80)
 
 # Main Body Container
 body_frame = Frame(root, borderwidth=6)
-body_frame.place(x=80, y=100, width=1160, height=660)
-
-# @@@@@
+body_frame.place(x=10, y=100, width=1160, height=660)
 
 words = []
 
 
 def add_word_window():
-    # declare word, description, and alert as global variables
     global word, description, alert
     add_root = Tk()
     add_root.title("Add Word in Dictionary")
@@ -172,32 +169,35 @@ def update_word_window(word_id, current_word, current_description):
 '''
     Function that handles delete button actions!!
 '''
+
+
 def delete_button():
     del_root = Tk()
-    del_root.resizable(False,False)
+    del_root.resizable(False, False)
     del_root.geometry("400x400")
 
     def delete_action():
-        password = password_entry.get().strip().lower() #getting password
-        if(password!="1234"):
+        password = password_entry.get().strip().lower()  # getting password
+        if (password != "1234"):
             del_root.destroy()
             not_admin_root = Tk()
             not_admin_root.geometry("300x300")
-            not_admin_root.resizable(False,False)
-            alert = Label(not_admin_root,text="Sorry, cannot continue you're no admin.",font=30,fg="red")
-            alert.place(x=10,y=120)
+            not_admin_root.resizable(False, False)
+            alert = Label(
+                not_admin_root, text="Sorry, cannot continue you're no admin.", font=30, fg="red")
+            alert.place(x=10, y=120)
             not_admin_root.mainloop()
         else:
             del_root.destroy()
             yes_admin = Tk()
             yes_admin.geometry("400x400")
-            yes_admin.resizable(False,False)
-            word_error_msg = Label(yes_admin,text="",fg="red",font=20)
-            word_error_msg.place(x=80,y=330)
+            yes_admin.resizable(False, False)
+            word_error_msg = Label(yes_admin, text="", fg="red", font=20)
+            word_error_msg.place(x=80, y=330)
 
-            #function that handles delete button
+            # function that handles delete button
             def delete_word():
-                by_user_word_to_delete =word_to_delete_entry.get().strip() 
+                by_user_word_to_delete = word_to_delete_entry.get().strip()
                 word_des_inside = json.loads(retrieve_data())
 
                 def check_word_existis_or_not():
@@ -206,20 +206,18 @@ def delete_button():
                             return True
                     return False
 
-                    
-                
-                if by_user_word_to_delete=="":
-                    word_error_msg.config(text="Word must be entered to proceed.")
+                if by_user_word_to_delete == "":
+                    word_error_msg.config(
+                        text="Word must be entered to proceed.")
 
                 elif not check_word_existis_or_not():
-                    word_error_msg.config(text="Word not found. Deletion failed")
-                    
+                    word_error_msg.config(
+                        text="Word not found. Deletion failed")
+
                 else:
                     word_error_msg.destroy()
                     delete_word_inside.destroy()
                     # print(f"test xxxxxxxxxxxxxx        :{word_des_inside}")
-                    
-                    
 
                     def result_(msg):
                         result_msg.config(text=f"ALERT: {msg}")
@@ -238,84 +236,75 @@ def delete_button():
                                 if entry["word"] == word:
                                     return index
                             return None
-                        
 
-
-                        word_to_delete_dict_index = get_index_of_dict(by_user_word_to_delete)
+                        word_to_delete_dict_index = get_index_of_dict(
+                            by_user_word_to_delete)
                         word_des_inside.pop(word_to_delete_dict_index)
-                        #after poping now update the data to db and update the ui
+                        # after poping now update the data to db and update the ui
 
-                        #update the db with new word_list
+                        # update the db with new word_list
                         conn = sqlite3.connect('words.db')
                         cursor = conn.cursor()
 
-                        #clear existing data
+                        # clear existing data
                         cursor.execute('''DELETE FROM description''')
 
-                        #inserting the updated word list into the data base
+                        # inserting the updated word list into the data base
                         for word_entry in word_des_inside:
-                            cursor.execute('''INSERT INTO description(word, description) VALUES(?, ?)''',(word_entry['word'],word_entry['description']))
+                            cursor.execute('''INSERT INTO description(word, description) VALUES(?, ?)''', (
+                                word_entry['word'], word_entry['description']))
 
                         conn.commit()
                         conn.close()
 
-
                         global word_list
                         word_list = word_des_inside
 
-
-
                         display_words_ui(body_frame)
-                       
-                        
-
 
                         confirm_label.destroy()
                         yes_button.destroy()
                         no_button.destroy()
                         word_to_delete_label.destroy()
-                        word_to_delete_entry.destroy()             
+                        word_to_delete_entry.destroy()
                         result_("Word Deleted Sucessfully")
-                    
 
-                    
-                    confirm_label = Label(yes_admin,text="Are you sure?",fg="red",font=20)
-                    confirm_label.place(x=150,y=250,)
-                    yes_button=Button(yes_admin,text="Yes",command=yes_pressed)
-                    yes_button.place(x=110,y=280,width=80,height=40)
-                    no_button = Button(yes_admin,text="No",command=no_pressed)
-                    no_button.place(x=190,y=280,width=80,height=40)
-                    result_msg = Label(yes_admin,text="",fg="green")
-                    result_msg.place(x=110,y=330)
-                
-
-
+                    confirm_label = Label(
+                        yes_admin, text="Are you sure?", fg="red", font=20)
+                    confirm_label.place(x=150, y=250,)
+                    yes_button = Button(
+                        yes_admin, text="Yes", command=yes_pressed)
+                    yes_button.place(x=110, y=280, width=80, height=40)
+                    no_button = Button(yes_admin, text="No",
+                                       command=no_pressed)
+                    no_button.place(x=190, y=280, width=80, height=40)
+                    result_msg = Label(yes_admin, text="", fg="green")
+                    result_msg.place(x=110, y=330)
 
             # labels, entries and buttons.
-            word_to_delete_label = Label(yes_admin,text="Enter the word to delete",font=18)
-            word_to_delete_label.place(x=50,y=50)
-            word_to_delete_entry = Entry(yes_admin,font=18)
-            word_to_delete_entry.place(x=50,y=80,width=200,height=30)
-            delete_word_inside = Button(yes_admin,text="Delete",command=delete_word)
-            delete_word_inside.place(x=100,y=150,height=40,width=80)
+            word_to_delete_label = Label(
+                yes_admin, text="Enter the word to delete", font=18)
+            word_to_delete_label.place(x=50, y=50)
+            word_to_delete_entry = Entry(yes_admin, font=18)
+            word_to_delete_entry.place(x=50, y=80, width=200, height=30)
+            delete_word_inside = Button(
+                yes_admin, text="Delete", command=delete_word)
+            delete_word_inside.place(x=100, y=150, height=40, width=80)
 
             yes_admin.mainloop()
-            
 
-   
-    password_label = Label(del_root,text="Enter token to continue",font=18)
-    password_label.place(x=110,y=80)
-    password_entry= Entry(del_root,font=20)
-    password_entry.place(x=110,y=100,width=180,height=30)
-    cont_button = Button(del_root,text="Continue =>",font=20,command=delete_action)
-    cont_button.place(x=150,y=180,height=50,width=100)
+    password_label = Label(del_root, text="Enter token to continue", font=18)
+    password_label.place(x=110, y=80)
+    password_entry = Entry(del_root, font=20)
+    password_entry.place(x=110, y=100, width=180, height=30)
+    cont_button = Button(del_root, text="Continue =>",
+                         font=20, command=delete_action)
+    cont_button.place(x=150, y=180, height=50, width=100)
 
     del_root.mainloop()
 
 
-
-
-# function to check user word exists or not 
+# function to check user word exists or not
 def check_user_word(word_by_user):
     load_words = json.loads(retrieve_data())
     words = [d["word"] for d in load_words]
@@ -389,9 +378,21 @@ for i in word_list:
     words.append(i["word"].lower())
 
 
-###################################################################################################################################
+# top header container
+top_frame = Frame(root, borderwidth=6, bg='green')
+top_frame.place(x=20, y=1, width=1160, height=80)
+
+# Main Body Container
+body_frame = Frame(root, borderwidth=6)
+body_frame.place(x=10, y=100, width=1160, height=660)
+
+words = []
+
+# Iterate over Word list and render the word
+
+
 def display_words_ui(container_frame):
-        # Get the list of existing widgets
+    # Get the list of existing widgets
     widgets = container_frame.winfo_children()
 
     # Skip the first two widgets (assuming they are the Add New Word and Delete Word buttons)
@@ -400,45 +401,25 @@ def display_words_ui(container_frame):
     # Destroy existing word frames
     for widget in existing_widgets:
         widget.destroy()
-    #above here destroyed the exising widget except the add word and delete word button
-        
-    
+    # above here destroyed the exising widget except the add word and delete word button
+
     for i, word_dict in enumerate(word_list):
-        word_frame = Frame(container_frame , relief="solid")
+        word_frame = Frame(container_frame, relief="solid")
         word_frame.grid(row=(i // 3), column=i %
-                        3, padx=60, pady=60, sticky="w")
+                        3, padx=60, pady=40, sticky="w")
 
         word_label = Label(word_frame, text=f"{word_dict['word']}", font=(
-            "Helvetica", 12), justify="left", wraplength=400)
+            "Helvetica", 12), justify="left", wraplength=320)
         word_label.grid(row=0, column=0, sticky="w")
 
         word_des_label = Label(word_frame, text=f"{word_dict['description']}", font=(
-            "Helvetica", 14), justify="left", wraplength=400)
+            "Helvetica", 14), justify="left", wraplength=320)
         word_des_label.grid(row=1, column=0, sticky="w")
 
         update_button = Button(word_frame, text="Update", command=lambda id=word_dict['id'], word=word_dict[
                                'word'], description=word_dict['description']: update_word_window(id, word, description))
         # Set sticky to "w" (west/left)
         update_button.grid(row=2, column=0, pady=5, sticky="w")
-
-
-def search_word():
-    pass
-    # word_label = Label(root, text='text')
-    # word_label.place(x=20, y=50, width=80, height=50)
-
-
-def search_bar():
-
-    # search bar section
-    search_entry = Entry(top_frame)
-    search_entry.place(x=460, y=5, width=620, height=40)
-
-    logo_label = Label(top_frame, text='Dictionary App')
-    logo_label.place(x=20, y=5, width=80, height=50)
-
-    search_button = Button(top_frame, text='Search', command=search_word)
-    search_button.place(x=1050, y=5, width=80, height=41)
 
 
 def display_words():
@@ -458,11 +439,65 @@ def main():
     add_word_button.place(x=380, y=1)
     delete_word_button.place(x=500, y=1)
 
+    display_words()
+
+
+def search_bar():
+    # search bar section
+    global search_entry
+    search_entry = Entry(top_frame)
+    search_entry.place(x=460, y=5, width=620, height=40)
+
+    logo_label = Label(top_frame, text='Dictionary App')
+    logo_label.place(x=20, y=5, width=80, height=50)
+
+    search_button = Button(top_frame, text='Search', command=search_word)
+    search_button.place(x=1050, y=5, width=80, height=41)
+
+
+def search_word():
+    search_root = Tk()
+    search_root.resizable(False, False)
+    search_root.geometry("400x400")
+
+    user_search_input = search_entry.get().lower()
+
+    # First filter the word list
+    def filter_items(word_dict):
+        return user_search_input in word_dict['word'].lower()
+
+    filteredWordList = list(filter(filter_items, word_list))
+
+    if filteredWordList:
+        display_filtered_words(search_root, filteredWordList)
+    else:
+        no_result_label = Label(search_root, text="No matching words found.")
+        no_result_label.pack()
+
+    search_root.mainloop()
+
+
+def display_filtered_words(search_root, filteredWordList):
+    for i, word_dict in enumerate(filteredWordList):
+        word_frame = Frame(search_root, relief="solid")
+        word_frame.grid(row=i, column=0, padx=60, pady=40, sticky="w")
+
+        word_label = Label(word_frame, text=f"{word_dict['word']}", font=(
+            "Helvetica", 12), justify="left", wraplength=320)
+        word_label.grid(row=0, column=0, sticky="w")
+
+        word_des_label = Label(word_frame, text=f"{word_dict['description']}", font=(
+            "Helvetica", 14), justify="left", wraplength=320)
+        word_des_label.grid(row=1, column=0, sticky="w")
+
+        update_button = Button(word_frame, text="Update", command=lambda id=word_dict['id'], word=word_dict[
+            'word'], description=word_dict['description']: update_word_window(id, word, description))
+
+        # Set sticky to "w" (west/left)
+        update_button.grid(row=2, column=0, pady=5, sticky="w")
+
 
 # search function
 search_bar()
 main()
-display_words()
-
-
 root.mainloop()

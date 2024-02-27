@@ -23,6 +23,7 @@ def create_database():
     connection.commit()
     connection.close()
 
+
 # Function to insert a new user into the 'users' table
 def insert_user(name, email, username, password):
     connection = sqlite3.connect("users.db")
@@ -60,6 +61,15 @@ def fetch_all_users():
 # Function to create the login window
 def create_login_window():
     create_database()
+
+    # Function to handle login button click
+    def toggle_password_visibility():
+        if password_entry['show'] == '•':
+            password_entry.config(show='')
+            show_hide_button.config(text="Hide Password")
+        else:
+            password_entry.config(show='•')
+            show_hide_button.config(text="Show Password")
 
     # Function to handle login button click
     def login_action():
@@ -112,8 +122,12 @@ def create_login_window():
     password_entry = Entry(right_frame, font=("Helvetica", 14), bd=5, relief="flat", justify="center", show="•")
     password_entry.place(relx=0.6, rely=0.40, anchor="center", width=200)
 
+    show_hide_button = Button(right_frame, text="Show Password", font=("Helvetica", 10), bg="#D9D9D9", fg="black", command=toggle_password_visibility)
+    show_hide_button.place(relx=0.50, rely=0.5, anchor="center")
+
     result_label = Label(right_frame, text="", font=("Helvetica", 12), fg="green", bg="#D9D9D9")
     result_label.place(relx=0.5, rely=0.85, anchor="center")
+
 
     # Function to switch to the registration view
     def switch_to_registration_view():
