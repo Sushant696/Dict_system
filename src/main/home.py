@@ -394,7 +394,7 @@ top_frame = Frame(root, borderwidth=6, bg='green')
 top_frame.place(x=20, y=1, width=1160, height=100)
 
 # Main Body Container
-body_frame = Frame(root, borderwidth=6 , bg='red')
+body_frame = Frame(root, borderwidth=6)
 body_frame.place(x=19.5, y=100, width=1160, height=750)
 
 words = []
@@ -425,7 +425,7 @@ def display_words_ui(body_frame):
         word_frame.bind("<Leave>", on_leave)  # Bind event for hover leave
 
         word_label = Label(word_frame, text=f"{word_dict['word']}", font=(
-            "Helvetica", 14), justify="left", bg="red" ,wraplength=320)
+            "Helvetica", 14), justify="left",wraplength=320)
         word_label.grid(row=0, column=0, sticky="w")
 
         word_des_label = Label(word_frame, text=f"{word_dict['description']}", font=(
@@ -577,3 +577,24 @@ def display_filtered_words(search_root, filteredWordList):
 search_bar()
 main()
 root.mainloop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
