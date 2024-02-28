@@ -57,7 +57,7 @@ def fetch_all_users():
     connection.close()
 
     return users
-
+window = None
 # Function to create the login window
 def create_login_window():
     create_database()
@@ -91,6 +91,7 @@ def create_login_window():
             result_label.config(text="Please enter both username and password.", fg="red")
 
     # Creating the main login window
+    global window
     window = Tk()
     window.title("Login Page")
     window.geometry("600x500")
@@ -239,14 +240,7 @@ def create_login_window():
 
 # Function for opening a new window after successful login
 def create_work_completed_window():
-    work_completed_window = Tk()
-    work_completed_window.title("Work Completed Page")
-    work_completed_window.geometry("400x300")
-
-    label_work_completed = Label(work_completed_window, text="Congratulations! Your work is completed.", font=("Helvetica", 16))
-    label_work_completed.pack(pady=50)
-
-    work_completed_window.mainloop()
-
+    window.destroy()
+    import home
 # Run the login window
 create_login_window()

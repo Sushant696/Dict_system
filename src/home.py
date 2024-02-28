@@ -478,19 +478,19 @@ def search_bar():
     search_entry = Entry(top_frame, font=18)
     search_entry.place(x=460, y=15, width=620, height=40)
 
-    # search_image = PhotoImage(
-    #     file="S:/Python/Collage Project/Tkinter_dict/src/main/logo1.svg")
+    # # search_image = PhotoImage(
+    # #     file="S:/Python/Collage Project/Tkinter_dict/src/main/logo1.svg")
 
-    # Creating a PhotoImage object to use the image
-    logo_image = PhotoImage(
-        file="S:/Python/Collage Project/Tkinter_dict/src/main/mainlogo.png")
+    # # Creating a PhotoImage object to use the image
+    # logo_image = PhotoImage(
+    #     file="S:/Python/Collage Project/Tkinter_dict/src/main/mainlogo.png")
 
-    # resized_image = logo_image.subsample(1, 1)
+    # # resized_image = logo_image.subsample(1, 1)
 
-    # Create a label to display the image
-    logo_label = Label(top_frame, image=logo_image, borderwidth=1)
-    logo_label.image = logo_image  # Keep a reference to avoid garbage collection
-    logo_label.pack(side="left", padx=0, pady=0, ipadx=50, ipady=290)
+    # # Create a label to display the image
+    # logo_label = Label(top_frame, image=logo_image, borderwidth=1)
+    # logo_label.image = logo_image  # Keep a reference to avoid garbage collection
+    # logo_label.pack(side="left", padx=0, pady=0, ipadx=50, ipady=290)
 
     # Create a button with the image
     search_button = Button(top_frame, text='Search',
