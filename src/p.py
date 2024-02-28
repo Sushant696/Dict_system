@@ -1,7 +1,6 @@
 import sqlite3
 from tkinter import *
 
-
 # Function to set background color of a frame
 def set_background_color(frame, color):
     frame.config(bg=color)
@@ -12,17 +11,18 @@ def create_database():
     cursor = connection.cursor()
 
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        email TEXT NOT NULL,
-        username TEXT NOT NULL,
-        password TEXT NOT NULL
-    )
-''')
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            username TEXT NOT NULL,
+            password TEXT NOT NULL
+        )
+    ''')
 
     connection.commit()
     connection.close()
+
 
 # Function to insert a new user into the 'users' table
 def insert_user(name, email, username, password):
@@ -57,10 +57,19 @@ def fetch_all_users():
     connection.close()
 
     return users
-
+window = None
 # Function to create the login window
 def create_login_window():
     create_database()
+
+    # Function to handle login button click
+    def toggle_password_visibility():
+        if password_entry['show'] == '•':
+            password_entry.config(show='')
+            show_hide_button.config(text="Hide Password")
+        else:
+            password_entry.config(show='•')
+            show_hide_button.config(text="Show Password")
 
     # Function to handle login button click
     def login_action():
@@ -81,14 +90,8 @@ def create_login_window():
         else:
             result_label.config(text="Please enter both username and password.", fg="red")
 
-    # Function to show or hide password
-    def toggle_password_visibility():
-        if show_password_var.get():
-            password_entry.config(show="")
-        else:
-            password_entry.config(show="•")
-
     # Creating the main login window
+    global window
     window = Tk()
     window.title("Login Page")
     window.geometry("600x500")
@@ -120,29 +123,130 @@ def create_login_window():
     password_entry = Entry(right_frame, font=("Helvetica", 14), bd=5, relief="flat", justify="center", show="•")
     password_entry.place(relx=0.6, rely=0.40, anchor="center", width=200)
 
-    show_password_var = BooleanVar()
-    show_password_var.set(False)
-    show_password_checkbutton = Checkbutton(right_frame, text="Show Password", variable=show_password_var, onvalue=True, offvalue=False, font=("Helvetica", 10), bg="#D9D9D9", fg="#4C5E8C", command=toggle_password_visibility)
-    show_password_checkbutton.place(relx=0.5, rely=0.5, anchor="center")
+    show_hide_button = Button(right_frame, text="Show Password", font=("Helvetica", 10), bg="#D9D9D9", fg="black", command=toggle_password_visibility)
+    show_hide_button.place(relx=0.50, rely=0.5, anchor="center")
 
     result_label = Label(right_frame, text="", font=("Helvetica", 12), fg="green", bg="#D9D9D9")
     result_label.place(relx=0.5, rely=0.85, anchor="center")
 
-    login_button = Button(right_frame, text=" Login ", font=("Helvetica", 12), bg="#3D9962", fg="white", command=login_action)
-    login_button.place(relx=0.5, rely=0.6, anchor="center")
 
-    window.mainloop()
+    # Function to switch to the registration view
+    def switch_to_registration_view():
+        registration_window.deiconify()
+        window.withdraw()
+
+    registration_button = Button(right_frame, text=" Register ", font=("Helvetica", 12), bg="#3D9962", fg="white", command=switch_to_registration_view)
+    registration_button.place(relx=0.5, rely=0.7, anchor="center")
+
+    login_button = Button(right_frame, text=" Login ", font=("Helvetica", 12), bg="#3D9962", fg="white", command=login_action)
+    login_button.place(relx=0.5, rely=0.8, anchor="center")
+
+    window.grid_rowconfigure(0, weight=1)
+    window.grid_columnconfigure(0, weight=1)
+    window.grid_columnconfigure(1, weight=1)
+
+    # Creating the registration window
+    registration_window = Tk()
+    registration_window.title("Registration Page")
+    registration_window.geometry("600x500")
+    registration_window.resizable(0, 0)
+    registration_window.withdraw()
+
+    registration_left_frame = Frame(registration_window, width=300, height=500)
+    registration_left_frame.grid(row=0, column=0, sticky="nsew")
+    set_background_color(registration_left_frame, "#3D9962")
+
+    registration_label_team = Label(registration_left_frame, text="Project Ignition", font=("Helvetica", 20), bg="#3D9962", fg="white")
+    registration_label_team.place(relx=0.5, rely=0.5, anchor="center")
+
+    registration_right_frame = Frame(registration_window, width=300, height=500)
+    registration_right_frame.grid(row=0, column=1, sticky="nsew")
+    set_background_color(registration_right_frame, "#D9D9D9")
+
+    registration_label_signup = Label(registration_right_frame, text="Registration", font=("Helvetica", 20), bg="#D9D9D9", fg="#4C5E8C")
+    registration_label_signup.place(relx=0.5, rely=0.1, anchor="center")
+
+    registration_name_label = Label(registration_right_frame, text="Name", font=("Helvetica", 10), bg="#D9D9D9", fg="black")
+    registration_name_label.place(relx=0.15, rely=0.25, anchor="center")
+
+    registration_name_entry = Entry(registration_right_frame, font=("Helvetica", 14), bd=4, relief="flat", justify="center")
+    registration_name_entry.place(relx=0.6, rely=0.25, anchor="center", width=200)
+
+    registration_email_label = Label(registration_right_frame, text="Email", font=("Helvetica", 10), bg="#D9D9D9", fg="black")
+    registration_email_label.place(relx=0.15, rely=0.35, anchor="center")
+
+    registration_email_entry = Entry(registration_right_frame, font=("Helvetica", 14), bd=5, relief="flat", justify="center")
+    registration_email_entry.place(relx=0.6, rely=0.35, anchor="center", width=200)
+
+    registration_username_label = Label(registration_right_frame, text="Username", font=("Helvetica", 10), bg="#D9D9D9", fg="black")
+    registration_username_label.place(relx=0.15, rely=0.45, anchor="center")
+
+    registration_username_entry = Entry(registration_right_frame, font=("Helvetica", 14), bd=5, relief="flat", justify="center")
+    registration_username_entry.place(relx=0.6, rely=0.45, anchor="center", width=200)
+
+    registration_password_label = Label(registration_right_frame, text="Password", font=("Helvetica", 10), bg="#D9D9D9", fg="black")
+    registration_password_label.place(relx=0.15, rely=0.55, anchor="center")
+
+    registration_password_entry = Entry(registration_right_frame, font=("Helvetica", 14), bd=5, relief="flat", justify="center", show="•")
+    registration_password_entry.place(relx=0.6, rely=0.55, anchor="center", width=200)
+
+    registration_retype_password_label = Label(registration_right_frame, text="Retype-Pass", font=("Helvetica", 9), bg="#D9D9D9", fg="black")
+    registration_retype_password_label.place(relx=0.15, rely=0.65, anchor="center")
+
+    registration_retype_password_entry = Entry(registration_right_frame, font=("Helvetica", 14), bd=5, relief="flat", justify="center", show="•")
+    registration_retype_password_entry.place(relx=0.6, rely=0.65, anchor="center", width=200)
+
+    registration_result_label = Label(registration_right_frame, text="", font=("Helvetica", 12), fg="green", bg="#D9D9D9")
+    registration_result_label.place(relx=0.5, rely=0.85, anchor="center")
+
+    # Function to switch to the login view
+    def switch_to_login_view():
+        registration_window.withdraw()  # Hide registration window
+        window.deiconify()  # Show main application window
+
+    registration_back_to_login_button = Button(registration_right_frame, text=" Back to Login ", font=("Helvetica", 12), bg="#3D9962", fg="white", command=switch_to_login_view)
+    registration_back_to_login_button.place(relx=0.5, rely=0.8, anchor="center")
+
+    # Function to handle registration button click
+    def registration_action():
+        # Fetching data from entries
+        name = registration_name_entry.get()
+        email = registration_email_entry.get()
+        username = registration_username_entry.get()
+        password = registration_password_entry.get()
+        retype_password = registration_retype_password_entry.get()
+
+        if name and email and username and password and retype_password:
+            if password == retype_password:
+                if email.endswith(".com"):
+                    # Inserting the user into the database
+                    insert_user(name, email, username, password)
+                    registration_result_label.config(text="User has been registered successfully.", fg="green")
+                    # Clearing registration fields after successful registration
+                    registration_name_entry.delete(0, END)
+                    registration_email_entry.delete(0, END)
+                    registration_username_entry.delete(0, END)
+                    registration_password_entry.delete(0, END)
+                    registration_retype_password_entry.delete(0, END)
+                else:
+                    registration_result_label.config(text="Please provide a Gmail account.", fg="red")
+            else:
+                registration_result_label.config(text="Passwords do not match.", fg="red")
+        else:
+            registration_result_label.config(text="Please fill in all fields.", fg="red")
+
+    registration_register_button = Button(registration_right_frame, text=" Register ", font=("Helvetica", 12), bg="#3D9962", fg="white", command=registration_action)
+    registration_register_button.place(relx=0.5, rely=0.9, anchor="center")
+
+    registration_window.grid_rowconfigure(0, weight=1)
+    registration_window.grid_columnconfigure(0, weight=1)
+    registration_window.grid_columnconfigure(1, weight=1)
+
+    registration_window.mainloop()
 
 # Function for opening a new window after successful login
 def create_work_completed_window():
-    work_completed_window = Toplevel()
-    work_completed_window.title("Work Completed Page")
-    work_completed_window.geometry("400x300")
-
-    label_work_completed = Label(work_completed_window, text="Congratulations! Your work is completed.", font=("Helvetica", 16))
-    label_work_completed.pack(pady=50)
-
-    work_completed_window.mainloop()
-
+    window.destroy()
+    import home
 # Run the login window
 create_login_window()

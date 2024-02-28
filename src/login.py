@@ -222,6 +222,12 @@ def create_login_window():
                     # Inserting the user into the database
                     insert_user(name, email, username, password)
                     registration_result_label.config(text="User has been registered successfully.", fg="green")
+                    # Clearing registration fields after successful registration
+                    registration_name_entry.delete(0, END)
+                    registration_email_entry.delete(0, END)
+                    registration_username_entry.delete(0, END)
+                    registration_password_entry.delete(0, END)
+                    registration_retype_password_entry.delete(0, END)
                 else:
                     registration_result_label.config(text="Please provide a Gmail account.", fg="red")
             else:
