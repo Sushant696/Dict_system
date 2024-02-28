@@ -70,13 +70,6 @@ root.geometry('1200x780')
 root.title('Dictionary System')
 root.resizable(False, False)
 
-# Top header container
-top_frame = Frame(root, borderwidth=6, bg='green')
-top_frame.place(x=20, y=1, width=1160, height=160)
-
-# Main Body Container
-body_frame = Frame(root)
-body_frame.place(x=50, y=191, width=1160, height=718)
 
 words = []
 
@@ -412,9 +405,9 @@ words = []
 # Iterate over Word list and render the word
 
 
-def display_words_ui(container_frame):
+def display_words_ui(body_frame):
     # Get the list of existing widgets
-    widgets = container_frame.winfo_children()
+    widgets = body_frame.winfo_children()
 
     # Skip the first two widgets (assuming they are the Add New Word and Delete Word buttons)
     existing_widgets = widgets[2:]
@@ -435,7 +428,7 @@ def display_words_ui(container_frame):
         word_frame.bind("<Leave>", on_leave)  # Bind event for hover leave
 
         word_label = Label(word_frame, text=f"{word_dict['word']}", font=(
-            "Helvetica", 14), justify="left", wraplength=320)
+            "Helvetica", 14), justify="left",wraplength=320)
         word_label.grid(row=0, column=0, sticky="w")
 
         word_des_label = Label(word_frame, text=f"{word_dict['description']}", font=(
@@ -587,3 +580,24 @@ def display_filtered_words(search_root, filteredWordList):
 search_bar()
 main()
 root.mainloop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
